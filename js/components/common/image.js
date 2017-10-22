@@ -1,0 +1,34 @@
+//@flow
+'use strict';
+import React, { Component } from 'react';
+import { Image } from 'react-native';
+import ReactNative from 'react-native';
+const loading = require('./img/loading.jpg');
+export default class SIAImage extends Component {
+  props: {
+    radius?: number;
+    source: {uri: String};
+    onLoad?: () => void;
+    style: any;
+  };
+
+  render() {
+    let size = this.props.radius * 2 || 74
+    return (
+      <ReactNative.Image
+        style={this.props.circle ?
+          {
+            ...this.props.style,
+            height: size,
+            width: size,
+            borderRadius: size/2
+          } : this.props.style}
+          source={
+            this.props.source.uri ? { uri: this.props.source.uri} : this.props.source
+          }
+          onLoad={this.props.onLoad ? () => this.props.onLoad() : null}
+          defaultSource={loading}
+      />
+    );
+  }
+}
