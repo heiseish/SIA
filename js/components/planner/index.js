@@ -31,43 +31,43 @@ class TabView extends React.Component {
   render() {
     return (
       <StyleProvider  style={getTheme()}>
-      <Container>
-        <Header title={this.props.tab}/>
-        {this.renderSelectedTab()}
-        <Footer>
-          <FooterTab>
-            <Button vertical badge
-                active={this.props.tab === 'home'} 
-                onPress={() => this.onTabSelect('home')} >
-                <Badge ><Text>2</Text></Badge>
-              <Icon name="ios-apps-outline" 
-              active={this.props.tab === 'home'}
-              />
-              <Text>Home</Text>
-            </Button>
+        <Container>
+          <Header title={this.props.tab}/>
+          {this.renderSelectedTab()}
+          <Footer>
+            <FooterTab>
+              <Button vertical badge
+                  active={this.props.tab === 'home'} 
+                  onPress={() => this.onTabSelect('home')} >
+                  <Badge ><Text>2</Text></Badge>
+                <Icon name="ios-apps-outline" 
+                active={this.props.tab === 'home'}
+                />
+                <Text>Home</Text>
+              </Button>
 
 
-            <Button vertical
-                active={this.props.tab === 'recent'} 
-                onPress={() => this.onTabSelect('recent')} >
-              <Icon name="ios-apps-outline" 
-              active={this.props.tab === 'home'}/>
-              <Text>Recent</Text>
-            </Button>
+              <Button vertical
+                  active={this.props.tab === 'recent'} 
+                  onPress={() => this.onTabSelect('recent')} >
+                <Icon name="ios-apps-outline" 
+                active={this.props.tab === 'home'}/>
+                <Text>Recent</Text>
+              </Button>
 
 
-            <Button vertical badge
-                active={this.props.tab === 'setting'} 
-                onPress={() => this.onTabSelect('setting')} >
-                <Badge ><Text>4</Text></Badge>
-              <Icon name="ios-apps-outline" 
-              active={this.props.tab === 'home'}/>
-              <Text>Setting</Text>
-            </Button>
+              <Button vertical badge
+                  active={this.props.tab === 'setting'} 
+                  onPress={() => this.onTabSelect('setting')} >
+                  <Badge ><Text>4</Text></Badge>
+                <Icon name="ios-apps-outline" 
+                active={this.props.tab === 'home'}/>
+                <Text>Setting</Text>
+              </Button>
 
-          </FooterTab>
-        </Footer>
-      </Container>
+            </FooterTab>
+          </Footer>
+        </Container>
       </StyleProvider>
     );
   }

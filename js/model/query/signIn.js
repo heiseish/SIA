@@ -12,7 +12,9 @@ export const signIn  = (type: 'planner' | 'supervisor' | 'staff', id: string, pa
 					if (snap.child(id).child('password').val() === (password))
 						//if found just return the object
 						response(snap.child(id).val())
-					else 
+					else if (type === 'staff')
+						response(snap.child(id).val())
+					else
 						reject({message: 'The password is incorrect'})
 				} else
 					reject({message: 'No such user in our database'})

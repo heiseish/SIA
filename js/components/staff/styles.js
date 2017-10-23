@@ -1,9 +1,15 @@
-import { StyleSheet } from 'react-native';
+//@flow
+'use-strict';
+import { StyleSheet, Dimensions } from 'react-native';
+import styles from './styles'
 
-export default const styles = StyleSheet.create({
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
+export default StyleSheet.create({
     incompleteCard: {
         height: 125,
-        width: screen_width - 30,
+        width: screenWidth - 30,
         borderRadius: 20,
         backgroundColor: 'lightpink',
         borderWidth: 1,
@@ -15,7 +21,7 @@ export default const styles = StyleSheet.create({
     },
     completeCard: {
         height: 125,
-        width: screen_width - 30,
+        width: screenWidth - 30,
         borderRadius: 20,
         borderWidth: 1,
         backgroundColor: 'lightgreen',

@@ -1,3 +1,5 @@
+//@flow
+'use-strict';
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { Container, Content, Footer, FooterTab, Button, Icon } from 'native-base';

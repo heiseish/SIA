@@ -1,10 +1,8 @@
+//@flow
+'use-strict';
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import styles from './styles'
-
-const screen_width = Dimensions.get('window').width;
-const screen_height = Dimensions.get('window').height;
-
 /*
 Represents a TaskCard to be displayed on UI for staff.
 */
