@@ -4,6 +4,7 @@ const React = require('react-native');
 const { StyleSheet, Dimensions, Platform } = React;
 
 const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
 
 export default {
   listItem: {
@@ -33,5 +34,10 @@ export default {
   defectName: {
   	fontSize: 25,
   	fontWeight: '400'
+  },
+  modal: {
+    width: deviceWidth,
+    height: 500,
+    borderWidth: 1
   }
 };

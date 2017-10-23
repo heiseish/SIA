@@ -5,10 +5,11 @@ import React, { Component } from 'react';
 var StyleSheet = require('StyleSheet')
 import { View ,Image, TouchableOpacity, Platform} from 'react-native';
 import { Text , Icon } from 'native-base'
-export default class Button extends Component {
+import { primary, secondary } from './color';
 
+export default class Button extends Component {
   render() {
-    let color = this.props.color || '#2929a3'
+    let color = this.props.color || primary.normal
     let rate = this.props.rate || 0.5
     return (
       <TouchableOpacity
@@ -18,8 +19,8 @@ export default class Button extends Component {
         activeOpacity={0.8}
         >
         <LinearGradient
-          colors={[this.props.color, 
-            shadeColor2(this.props.color, rate)]}
+          colors={[color, 
+            shadeColor2(color, rate)]}
           style={{ ...this.props.style, justifyContent: 'center', alignItems:'center' }}>
           {this.props.icon  ? <Icon active={this.props.active} name={this.props.icon} style={{color: 'white', backgroundColor:'transparent'}}/> : null}
           {this.props.children || <Text style={[styles.buttonText, this.props.textStyle]}>

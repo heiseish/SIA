@@ -3,22 +3,23 @@
 import React, { Component } from 'react';
 import { View, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { Container,  Form, Item, Label, CheckBox,Input, Button, Text, Content, Icon } from 'native-base';
+import { Container,  Form, Item, Label, CheckBox,Input, Button, Text, Content, Icon, Spinner  } from 'native-base';
 import styles from './styles';
 import { Image, alert, Header} from '../../common/';
 import { createTask } from '../../../model/query';
-import { NavigationActions } from 'react-navigation'
+import { back } from '../../../actions';
 let ios = Platform.OS === 'ios'
 
 type Props = {
-  navigation: any,
+  back: () => void,
   creator: string
 };
 
 type State = {
   name: string,
   priority: '1' | '2' | '3',
-  description: string
+  description: string,
+  isLoading: boolean
 };
 
 class NewTask extends Component {
@@ -30,24 +31,28 @@ class NewTask extends Component {
     this.state = {
       name: '',
       priority: '1',
-      description: ''
+      description: '',
+      isLoading: false
     }
   }
 
   _pop(){
-    const backAction = NavigationActions.back()
-    this.props.navigation.dispatch(backAction);
+    this.props.back();
   }
 
   _createTask(){
+    this.setState({isLoading: true})
     createTask({
       name: this.state.name,
       priority: parseInt(this.state.priority, 10),
       description: this.state.description
     }, this.props.creator).then((res) => {
-      alert(res)
+      this.setState({isLoading: false})
+      alert(this._pop.bind(this), 'Successful!',
+        'The defect has been successfully created!');
     }).catch(err => {
-      alert(err.message)
+      this.setState({isLoading: false})
+      alert(undefined, err.message)
     })
   }
 
@@ -64,7 +69,7 @@ class NewTask extends Component {
         handlePressRight={() => this._createTask()}/>
 
         <Content>
-          <Form>
+          {this.state.isLoading ? <Spinner/> : <Form>
             <Item first stackedLabel>
               <Label>Name</Label>
               <Input 
@@ -99,37 +104,19 @@ class NewTask extends Component {
 
 
 
-          </Form>
+          </Form>}
         </Content>
       </Container>
     );
   }
 
-  done(){
-    this.setState({loading: true})
-    let user = {
-      ...this.props.user,
-      name: this.state.name,
-      interest: this.state.interest,
-      imageURI: this.state.image,
-      phone: this.state.contact,
-      contactable: this.state.checked
-    }
-    updateUser(user).then(() => {
-        console.log('done')
-        this.props.updateUserRedux(user)
-        this.setState({loading: false})
-        Actions.pop()
-      }).catch(err => {
-        console.log(err)
-        alert(err.message)
-        this.setState({loading: false})
-      })
-  }
 }
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   creator: state.user.name
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  back: (route: string) => dispatch(back(route))
+})
 
-export default connect(mapStateToProps)(NewTask);
+export default connect(mapStateToProps, mapDispatchToProps)(NewTask);

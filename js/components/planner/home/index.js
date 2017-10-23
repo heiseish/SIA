@@ -5,9 +5,12 @@ import { Image, View, StatusBar , TextInput, ListView} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
 import { alert, Header, Button as Btn, primary} from '../../common'
-import firebase from '../../../model/'
+import firebase from '../../../model'
+import { deleteTask } from '../../../model/query/'
+import { navigate } from '../../../actions'
 import styles from './styles';
-import { NavigationActions } from 'react-navigation'
+import Modal from 'react-native-modalbox'
+import InfoCard from '../infoCard'
 var _ = require('lodash/core')
 
 type Issue = {
@@ -18,16 +21,17 @@ type Issue = {
   id: string
 };
 type Props = {
-  navigation: any
+  navigate: () => void
 };
 type State = {
-  data: Array<Issue>
+  data: Array<Issue>,
+  selected: Issue | {}
 };
 
 /**
 * Home View for Planner. Display list of defects that are currently unattended to.
 */ 
-export default class Home extends Component {
+class Home extends Component {
   state: State;
   ds:any;
   props: Props;
@@ -39,6 +43,7 @@ export default class Home extends Component {
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       data: [],
+      selected: {}
     };
   }
 
@@ -64,19 +69,25 @@ export default class Home extends Component {
   }
 
 
+  initiateDelete(secId: number, rowId: number, rowMap: any) {
+    alert(() => this.deleteRow(secId, rowId, rowMap),
+      'Proceeding to delete defect',
+      'Are you sure you want to delete the defect?')
+  }
 
   deleteRow(secId: number, rowId: number, rowMap: any) {
     rowMap[`${secId}${rowId}`].props.closeRow();
-    const newData = [...this.state.data];
-    newData.splice(rowId, 1);
-    this.setState({ data: newData });
+    // const newData = [...this.state.data];
+    // newData.splice(rowId, 1);
+    // this.setState({ data: newData });
+
+    deleteTask(this.state.data[rowId].id).then(() => {
+      alert(undefined, 'Success!', 'The defect has been successfully deleted!');
+    });
   }
 
   _addDefects(){
-    const navigateAction = NavigationActions.navigate({
-      routeName: 'NewTask'
-    })
-    this.props.navigation.dispatch(navigateAction)
+    this.props.navigate('NewTask');
   }
 
   render() {
@@ -99,19 +110,30 @@ export default class Home extends Component {
                 <Icon active name="information-circle" />
               </Button>}
             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-              <Button full danger onPress={_ => this.deleteRow(secId, rowId, rowMap)}>
+              <Button full danger onPress={_ => this.initiateDelete(secId, rowId, rowMap)}>
                 <Icon active name="trash" />
               </Button>}
             leftOpenValue={75}
             rightOpenValue={-75}
           />
         </Content>
+
+        <Modal
+          style={styles.modal}
+          ref={"modal"}
+          swipeToClose={true}>
+            <InfoCard defect={this.state.selected}/>
+        </Modal>
+
         </Container>
       );
   }
 
   renderRow = (data: any) => (
-    <ListItem style={styles.listItem}>
+    <ListItem button style={styles.listItem} onPress={() => { 
+      this.setState({selected: data})
+      this.refs.modal.open()
+    }}>
       <Left>
         <Btn style={styles.priorityIndicator} color={data.priority === 3 ? '#b30000' : data.priority === 2 ? '#e68a00' : '#0000e6' } rate={0.5}>
           <Text style={styles.priorityText}>{data.priority}</Text>
@@ -134,4 +156,9 @@ export default class Home extends Component {
   )
 
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  navigate: (route: string, params: any) => dispatch(navigate(route, params))
+})
+export default connect(null, mapDispatchToProps)(Home);
 

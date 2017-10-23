@@ -245,7 +245,7 @@ export default {
   },
 
   // Spinner
-  defaultSpinnerColor: "#45D56E",
+  defaultSpinnerColor: primary.normal,
   inverseSpinnerColor: "#1A191B",
 
   // Tabs

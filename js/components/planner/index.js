@@ -11,7 +11,6 @@ import HomeView from './home';
 import HistoryView from './history';
 import SettingView from './setting';
 import { Container, Content, Footer, FooterTab, Button, Icon, Text, Badge, StyleProvider } from 'native-base';
-import getTheme from '../../../native-base-theme/components';
 
 type Tab = 'home' | 'recent' | 'setting';
 
@@ -30,7 +29,7 @@ class TabView extends React.Component {
 
   render() {
     return (
-      <StyleProvider  style={getTheme()}>
+      
         <Container>
           {this.renderSelectedTab()}
           <Footer>
@@ -67,7 +66,6 @@ class TabView extends React.Component {
             </FooterTab>
           </Footer>
         </Container>
-      </StyleProvider>
     );
   }
 

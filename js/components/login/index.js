@@ -8,9 +8,8 @@ import styles from './styles';
 const background = require('./cover.jpg')
 import { Image,  alert, Button, primary} from '../common';
 import { signIn } from '../../model/query'
-import { userLogin } from '../../actions/';
+import { userLogin, navigate } from '../../actions/';
 import type User from '../../reducers/user';
-import { NavigationActions } from 'react-navigation'
 
 
 var _  = require('lodash/core');
@@ -18,11 +17,8 @@ var _  = require('lodash/core');
 let ios = Platform.OS === 'ios'
 type Props = {
   user: ?Object,
-  route: ?Object,
   userLogin: () => void,
-  pushRoute: () => void,
-  navigation: () => void,
-  setNutritionList: () => void
+  navigate: () => void,
 };
 
 type State = {
@@ -64,7 +60,7 @@ class Login extends Component {
         //need to add type attribute to user object
         user.type = type;
         this.props.userLogin(user);
-        this._navigate(this.capitalizeFirstLetter(type), user);
+        this.props.navigate(this.capitalizeFirstLetter(type), user)
       }).catch(err => {
         alert(err.message)
       }).then(() => {
@@ -77,11 +73,11 @@ class Login extends Component {
   }
 
   _navigate = (route: string, params: any) => {
-    const navigateAction = NavigationActions.navigate({
-      routeName: route,
-      params: params
-    })
-    this.props.navigation.dispatch(navigateAction)
+    // const navigateAction = NavigationActions.navigate({
+    //   routeName: route,
+    //   params: params
+    // })
+    // this.props.navigation.dispatch(navigateAction)
   }
 
   render() {
@@ -132,7 +128,7 @@ class Login extends Component {
         </View>
 
         <View style={styles.bottomHalf}>
-          {this.state.isLoading ? <Spinner color = "blue"/> : <Button  
+          {this.state.isLoading ? <Spinner/> : <Button  
             style={styles.loginButton}
             color={primary.normal}
             rate={0.2}
@@ -176,7 +172,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     userLogin: (user: User) => dispatch(userLogin(user)),
-    // setNutritionList: (list: Array<any>) => dispatch(setNutritionList(list))
+    navigate: (route: string, params: Object) => dispatch(navigate(route, params))
   };
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Login);
