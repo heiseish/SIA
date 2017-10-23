@@ -19,7 +19,7 @@ export default class Button extends Component {
         >
         <LinearGradient
           colors={[this.props.color, 
-            shadeColor2(this.props.color, 0.2)]}
+            shadeColor2(this.props.color, rate)]}
           style={{ ...this.props.style, justifyContent: 'center', alignItems:'center' }}>
           {this.props.icon  ? <Icon active={this.props.active} name={this.props.icon} style={{color: 'white', backgroundColor:'transparent'}}/> : null}
           {this.props.children || <Text style={[styles.buttonText, this.props.textStyle]}>

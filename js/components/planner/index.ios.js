@@ -8,7 +8,7 @@ var { switchTab } = require('../../actions');
 var { connect } = require('react-redux');
 import { primary, secondary } from '../common/color';
 import HomeView from './home';
-import NotificationView from './notification';
+import HistoryView from './history';
 import SettingView from './setting';
 type Tab = 'home' | 'notification' | 'setting';
 
@@ -42,7 +42,7 @@ class TabView extends React.Component {
           selected={this.props.tab === 'notification'}
           onPress={this.onTabSelect.bind(this, 'notification')}
           systemIcon="recents">
-          <NotificationView
+          <HistoryView
             navigation={this.props.navigation}
           />
         </TabBarItemIOS>

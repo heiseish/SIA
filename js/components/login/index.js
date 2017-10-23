@@ -9,6 +9,8 @@ const background = require('./cover.jpg')
 import { Image,  alert, Button, primary} from '../common';
 import { signIn } from '../../model/query'
 import { userLogin } from '../../actions/';
+import type User from '../../reducers/user';
+
 var _  = require('lodash/core');
 
 let ios = Platform.OS === 'ios'
@@ -30,12 +32,6 @@ type State = {
   passwordKeyedIn: boolean
 };
 
-type User = {
-  id?: string,
-  password?: string,
-  issue?: Array<any>,
-  type?: 'planner' | 'supervisor' | 'staff'
-};
 
 class Login extends Component {
   props: Props;
@@ -55,20 +51,6 @@ class Login extends Component {
       IDKeyedIn: false,
       passwordKeyedIn: false
     };
-  }
-
-  componentDidMount () {
-    if (!_.isEmpty(this.props.user)) {
-      let user = this.props.user
-      this._load();
-        try {
-          signIn(user.type, user.id, user.password).then(res => {
-          this._navigate(this.capitalizeFirstLetter(user.type), user);
-          })
-        } catch(err) {
-          this._load()
-        }
-    }
   }
   
   login = () => {
@@ -144,10 +126,10 @@ class Login extends Component {
         </View>
 
         <View style={styles.bottomHalf}>
-          {this.state.isLoading ? <Spinner/> : <Button  
+          {this.state.isLoading ? <Spinner color = "blue"/> : <Button  
             style={styles.loginButton}
             color={primary.normal}
-            rate={0.6}
+            rate={0.2}
             // onPress={() => this.state.isLoading ? null: this.login(this.state.name,this.state.password)}
             onPress={() => this.login()}
           >

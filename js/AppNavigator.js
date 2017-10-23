@@ -3,7 +3,7 @@
 
 import { StackNavigator } from 'react-navigation';
 import Login from './components/login';
-import Planner from './components/planner/'
+import Planner from './components/planner/index.js'
 
 const AppRouteConfigs = {
   Login: {

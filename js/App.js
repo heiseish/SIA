@@ -10,12 +10,12 @@ import { connect } from 'react-redux';
 class App extends React.Component {
   render() {
     return (
-      <Root>
-        <AppNavigator navigation={addNavigationHelpers({
-          dispatch: this.props.dispatch,
-          state: this.props.nav,
-        })} />
-      </Root>
+        <Root>
+          <AppNavigator navigation={addNavigationHelpers({
+            dispatch: this.props.dispatch,
+            state: this.props.nav,
+          })} />
+        </Root>
     );
   }
 }

@@ -1,7 +1,7 @@
 //@flow
 'use-strict'
 import React, { Component } from 'react';
-import { Image, View, StatusBar , TextInput, ListView} from 'react-native';
+import { Image, View, StatusBar , TextInput, ListView, FlatList} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
 import { alert, Header, Button as Btn, primary, theme} from '../../common'
@@ -23,7 +23,7 @@ type State = {
   data: Array<Issue>
 };
 
-export default class Home extends Component {
+export default class History extends Component {
   state: State;
   ds:any;
   props: Props;
@@ -45,7 +45,7 @@ export default class Home extends Component {
     defectsRef.on('value', (dataSnapshot) => {
       var defects = [];
       dataSnapshot.forEach((child) => {
-        if (child.child('status').val() === 'unattended')
+        if (child.child('status').val() !== 'unattended')
           defects.push(child.val());
       });
       this.setState({
@@ -100,8 +100,10 @@ export default class Home extends Component {
         </Btn>
         <Body style={{marginLeft: 50}}>
           <Text style={styles.defectName}>{data.name}</Text>
-          <Text style={styles.info}>Creator: {data.creator}</Text>
-          <Text style={styles.info} note>Status: <Text style={{color: 'red'}}>{data.status}</Text></Text>
+          <Text style={styles.info}>Supervisor: {data.supervisor}</Text>
+          <Text style={styles.info} note>Status: <Text 
+          style={{color: data.status === 'Working in Progress' ? primary.normal : 'green'}}>{data.status}</Text>
+          </Text>
         </Body>
       </Left>
     </ListItem>

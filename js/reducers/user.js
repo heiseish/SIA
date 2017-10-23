@@ -2,9 +2,9 @@
 'use-strict';
 import type { Action } from '../actions/types';
 export type State = {
+  name?: string,
   id?: string,
   password?: string,
-  issues?: Array<any>,
   type?:'planner' | 'supervisor' | 'staff',
 };
 
