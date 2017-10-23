@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+
+const screen_width = Dimensions.get('window').width;
+const screen_height = Dimensions.get('window').height;
 
 /*
 Represents a TaskCard to be displayed on UI for staff.
@@ -7,12 +10,24 @@ Represents a TaskCard to be displayed on UI for staff.
 export default class TaskCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {complete: false, timeoutID: undefined};
+        this.state = {
+            complete: false,
+            timeoutID: undefined
+        };
     }
 
-    function _onWait(isComplete) {
+    componentDidMount = () => {
+        this.setState({
+            complete: false,
+            timeoutID: undefined
+        });
+    }
+
+    _onWaitTest = (isComplete) => { this.props._collapse(); }
+
+    _onWait = (isComplete) => {
         if (isComplete) {
-            const id = this.setTimeout(this.props._collapse, 5000);
+            const id = setTimeout(this.props._collapse, 3000);
             this.setState((prevState, props)=>{
                 return {
                     complete: prevState.complete,
@@ -20,11 +35,11 @@ export default class TaskCard extends Component {
                 };
             });
         } else {
-            this.clearTimeout(this.state.timeoutID);
+            clearTimeout(this.state.timeoutID);
         }
     }
 
-    function _onPressCard() {
+    _onPressCard = () => {
         this.setState((prevState, props)=>{
             return {complete: !prevState.complete,
                 timeoutID: prevState.timeoutID};
@@ -34,20 +49,20 @@ export default class TaskCard extends Component {
     render() {
         if (!this.state.complete) {
             return (
-                <TouchableOpacity onPress={this._onPressCard}>
+                <TouchableOpacity onPress={this._onPressCard} style={{padding: 4}}>
                     <View style={styles.incompleteCard}>
                         <Text style={styles.incompleteCardText}>
-                            {this.props.card_text}
+                            {this.props.card_id}. {this.props.card_text}
                         </Text>
                     </View>
                 </TouchableOpacity>
             );
         } else {
             return (
-                <TouchableOpacity onPress={this._onPressCard}>
+                <TouchableOpacity onPress={this._onPressCard} style={{padding: 4}}>
                     <View style={styles.completeCard}>
                         <Text style={styles.completeCardText}>
-                            {this.props.card_text}
+                            {this.props.card_id}. {this.props.card_text}
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -59,29 +74,35 @@ export default class TaskCard extends Component {
 const styles = StyleSheet.create({
     incompleteCard: {
         height: 125,
+        width: screen_width - 30,
+        borderRadius: 20,
         backgroundColor: 'lightpink',
+        borderWidth: 1,
         borderColor: 'crimson',
         padding: 20,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        alignSelf: 'center'
     },
     completeCard: {
         height: 125,
+        width: screen_width - 30,
+        borderRadius: 20,
+        borderWidth: 1,
         backgroundColor: 'lightgreen',
         borderColor: 'forestgreen',
         padding: 20,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        alignSelf: 'center'
     },
     incompleteCardText: {
-        fontFamily: 'sans-serif',
-        fontSize: 40,
+        fontSize: 25,
         fontWeight: 'bold',
         color: 'darkred'
     },
     completeCardText: {
-        fontFamily: 'sans-serif',
-        fontSize: 40,
+        fontSize: 25,
         fontWeight: 'bold',
         color: 'darkgreen'
     }
