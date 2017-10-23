@@ -4,8 +4,7 @@ import { LinearGradient } from 'expo';
 import React, { Component } from 'react';
 var StyleSheet = require('StyleSheet')
 import { View ,Image, TouchableOpacity, Platform} from 'react-native';
-import {Text} from './RodacText'
-import {Icon} from 'native-base'
+import { Text , Icon } from 'native-base'
 export default class Button extends Component {
 
   render() {

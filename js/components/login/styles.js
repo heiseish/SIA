@@ -87,6 +87,10 @@ export default {
     flexDirection: 'row', 
     marginTop: 30
   },
+  pickerArea: {
+    height: 50,
+    flexDirection: 'row'
+  },
   pickerHolder: {
     height: 50,
     borderRadius: (width - 100) / 2,

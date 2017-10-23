@@ -17,15 +17,16 @@ if (process.env.NODE_ENV === `development`) {
 var createSIAStore = applyMiddleware(...middlewares)(createStore);
 var isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
-export default function configureStore(onCompletion: ?()=>void):any {
+export default function configureStore(onComplete: ?()=>void):any {
 
   //use realm instead of AsyncStorage for performance
-  // const store = autoRehydrate()(createRodStore)(reducers);
+  // const store = autoRehydrate()(createSIAStore)(reducers);
   const store = createSIAStore(reducers)
+  // persistStore(store, {storage: AsyncStorage}, onComplete);
+
   if (isDebuggingInChrome) {
     window.store = store;
   }
-  // persistStore(store, {storage: AsyncStorage}, onCompletion);
 
   return store;
 }

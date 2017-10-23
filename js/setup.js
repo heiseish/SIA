@@ -16,11 +16,14 @@ export default class SetUp extends React.Component {
   constructor() {
     super();
     (this:any).state = {
-      isLoading: true,
+      isLoading: false,
       store: configureStore(() => this.setState({ isLoading: false })),
     };
   }
   render() {
+    if (this.state.isLoading) {
+        return null;
+    }
     return (
       <Provider store={this.state.store}>
         <AppWithNavigationState/>

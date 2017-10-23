@@ -13,9 +13,12 @@ export default class SIAImage extends Component {
   };
 
   render() {
-    let size = this.props.radius * 2 || 74
+    let size
+    if (this.props.radius)
+      size = this.props.radius * 2
+    else size = 74
     return (
-      <ReactNative.Image
+      <Image
         style={this.props.circle ?
           {
             ...this.props.style,
