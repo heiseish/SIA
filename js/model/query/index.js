@@ -1,6 +1,6 @@
 //@flow
 'use-strict';
-const plannerSignIn = require('./plannerSignIn')
+const signIn = require('./signIn')
 module.exports =  {
-	...plannerSignIn,
+	...signIn,
 }

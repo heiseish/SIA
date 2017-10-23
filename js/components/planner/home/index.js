@@ -3,8 +3,8 @@
 import React, { Component } from 'react';
 import { Image, View, StatusBar ,TextInput} from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Toast, Content, Icon, Item, Label, Input} from 'native-base';
-import {Text, Button, Header, alert} from '../../common'
+import { Container, Toast, Content, Icon, Item, Label, Input, Text} from 'native-base';
+import { Button, alert} from '../../common'
 import styles from './styles';
 var _ = require('lodash/core')
 

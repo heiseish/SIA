@@ -3,8 +3,8 @@
 import React, { Component } from 'react';
 import { Image, View, StatusBar ,TextInput} from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Toast, Content, Icon, Item, Label, Input, Button} from 'native-base';
-import {Text, Header, alert} from '../../common'
+import { Container, Toast, Content, Icon, Item, Label, Input, Button, Text} from 'native-base';
+import { alert} from '../../common'
 import styles from './styles';
 var _ = require('lodash/core')
 
@@ -21,7 +21,7 @@ type State = {
   loading: boolean
 };
 
-export default class Feedback extends Component {
+export default class Setting extends Component {
 
   render() {
     return (

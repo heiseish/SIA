@@ -2,12 +2,12 @@
 'use-strict';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container,Content, Item, Text, Input, InputGroup, Icon, Button as Btn } from 'native-base';
+import { Container,Content, Item, Text, Input, InputGroup, Icon, Spinner, Button as Btn } from 'native-base';
 import { Animated, View, Platform, Picker} from 'react-native';
 import styles from './styles';
 const background = require('./cover.jpg')
 import { Image,  alert, Button, primary} from '../common';
-import { plannerSignIn } from '../../model/query'
+import { signIn } from '../../model/query'
 import { userLogin } from '../../actions/';
 var _  = require('lodash/core');
 
@@ -26,9 +26,15 @@ type State = {
   password: string,
   id: string,
   isLoading: boolean,
-  loggedIn: boolean,
   IDKeyedIn: boolean,
   passwordKeyedIn: boolean
+};
+
+type User = {
+  id?: string,
+  password?: string,
+  issue?: Array<any>,
+  type?: 'planner' | 'supervisor' | 'staff'
 };
 
 class Login extends Component {
@@ -45,41 +51,44 @@ class Login extends Component {
       type: 'planner', 
       password: '',
       id: '',
-      isLoading: true,
-      loggedIn: false,
+      isLoading: false,
       IDKeyedIn: false,
       passwordKeyedIn: false
     };
   }
 
-  // componentDidMount () {
-  //   getAuthState().then((user) => {
-  //     this.setState({isLoading: false})
-  //     this.props.userLogin(user);
-  //     Actions.home()
-  //   }).catch((err) => {
-  //     this.setState({isLoading: false})
-  //   })
-  // }
+  componentDidMount () {
+    if (!_.isEmpty(this.props.user)) {
+      let user = this.props.user
+      this._load();
+        try {
+          signIn(user.type, user.id, user.password).then(res => {
+          this._navigate(this.capitalizeFirstLetter(user.type), user);
+          })
+        } catch(err) {
+          this._load()
+        }
+    }
+  }
   
   login = () => {
-    let id = this.state.id
-    let password = this.state.password
-    switch (this.state.type) {
-      case 'planner':
-      plannerSignIn(id, password).then(user => {
-        this._navigate('Planner', user)
-      })
-      break;
-
-      default:
-
-
-    }
-    
+    this._load()
+    let id = this.state.id || '1421'
+    let password = this.state.password || 'Madara04'
+    let type = this.state.type
+    signIn(type, id, password).then(user => {
+        //need to add type attribute to user object
+        user.type = type;
+        this.props.userLogin(user);
+        this._navigate(this.capitalizeFirstLetter(type), user);
+      }).catch(err => {
+        alert(err.message)
+      }).then(() => {
+        this._load()
+      })  
   }
 
-  load = () => {
+  _load = () => {
     this.setState({isLoading: !this.state.isLoading})
   }
 
@@ -135,7 +144,7 @@ class Login extends Component {
         </View>
 
         <View style={styles.bottomHalf}>
-          <Button  
+          {this.state.isLoading ? <Spinner/> : <Button  
             style={styles.loginButton}
             color={primary.normal}
             rate={0.6}
@@ -144,7 +153,7 @@ class Login extends Component {
           >
             <Text style={{color: 'white', backgroundColor: 'transparent'}}>Login</Text>
 
-          </Button>
+          </Button>}
           <View style={styles.helpArea}>
             <Btn  transparent style={styles.helpText} onPress={() => {}}>
               <Text style={styles.signUpText}>Forgot Password</Text>
@@ -160,6 +169,14 @@ class Login extends Component {
 
     );
   }
+
+  /**
+  * Capitalize first letter of a string
+  */
+  capitalizeFirstLetter = (string: string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
 }
 
 
@@ -170,7 +187,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    userLogin: (user: Object) => dispatch(userLogin(user)),
+    userLogin: (user: User) => dispatch(userLogin(user)),
     // setNutritionList: (list: Array<any>) => dispatch(setNutritionList(list))
   };
 }

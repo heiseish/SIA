@@ -2,31 +2,27 @@
 'use-strict';
 import type { Action } from '../actions/types';
 export type State = {
-  name: string,
-  loggedIn: boolean
+  id?: string,
+  password?: string,
+  issues?: Array<any>,
+  type?:'planner' | 'supervisor' | 'staff',
 };
 
-const initialState = {
-  name: '',
-  loggedIn: false
-};
+const initialState = {};
 
 export default function (state : State = initialState, action : Action): State {
   switch (action.type) {
     case 'USER_LOGIN':
     return {
       ...state,
-      ...action.user,
-      loggedIn: true
+      ...action.user
     };
 
 
 
     case 'USER_LOGOUT':
-    return {
-      ...state,
-      loggedIn: false
-    };
+    //empty state
+    return {};
 
     case 'UPDATE_USER':
     return {
