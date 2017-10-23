@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Image, View, StatusBar , TextInput, ListView, FlatList} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
-import { alert, Header, Button as Btn, primary, theme} from '../../common'
+import { alert, Header, Button as Btn, primary} from '../../common'
 import firebase from '../../../model/'
 import styles from './styles';
 var _ = require('lodash/core')
@@ -23,6 +23,9 @@ type State = {
   data: Array<Issue>
 };
 
+/**
+* Recent View for Planner. Display list of defects that have bene attended to.
+*/
 export default class History extends Component {
   state: State;
   ds:any;
@@ -71,7 +74,9 @@ export default class History extends Component {
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return (
-        <Content theme={theme}>
+        <Container>
+        <Header title="Recent"/>
+        <Content>
           {this.renderHeader()}
           <List
           enableEmptySections
@@ -89,6 +94,7 @@ export default class History extends Component {
             rightOpenValue={-75}
           />
         </Content>
+        </Container>
       );
   }
 

@@ -5,14 +5,20 @@ import { StackNavigator } from 'react-navigation';
 import Login from './components/login';
 import Planner from './components/planner/';
 import Staff from './components/staff/Staff';
+import NewTask from './components/planner/newTask'
 
 const AppRouteConfigs = {
   Login: {
     screen: Login
   },
+  // Planner specific
   Planner: {
   	screen: Planner
   },
+  NewTask: {
+    screen: NewTask
+  },
+  // Staf specific
   Staff: {
     screen: Staff
   }

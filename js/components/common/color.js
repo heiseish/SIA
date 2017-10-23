@@ -7,5 +7,5 @@ export const primary = {
 export const secondary = {
 	normal: '#756452',
 	light: '#8f602c',
-	dark: '#350f00'
+	dark: '#44382c'
 }

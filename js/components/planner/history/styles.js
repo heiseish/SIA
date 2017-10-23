@@ -17,10 +17,11 @@ export default {
     padding: 20
   },
   priorityIndicator: {
+    marginTop: 10,
     marginLeft: 20,
-    height: 50,
-    width: 50, 
-    borderRadius: 25,
+    height: 40,
+    width: 40, 
+    borderRadius: 20,
   },
   priorityText: {
     backgroundColor: 'transparent',

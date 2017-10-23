@@ -10,6 +10,8 @@ import { Image,  alert, Button, primary} from '../common';
 import { signIn } from '../../model/query'
 import { userLogin } from '../../actions/';
 import type User from '../../reducers/user';
+import { NavigationActions } from 'react-navigation'
+
 
 var _  = require('lodash/core');
 
@@ -75,7 +77,11 @@ class Login extends Component {
   }
 
   _navigate = (route: string, params: any) => {
-    this.props.navigation.navigate(route, params)
+    const navigateAction = NavigationActions.navigate({
+      routeName: route,
+      params: params
+    })
+    this.props.navigation.dispatch(navigateAction)
   }
 
   render() {

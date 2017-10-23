@@ -4,9 +4,10 @@ import React, { Component } from 'react';
 import { Image, View, StatusBar , TextInput, ListView} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
-import { alert, Header, Button as Btn, primary, theme} from '../../common'
+import { alert, Header, Button as Btn, primary} from '../../common'
 import firebase from '../../../model/'
 import styles from './styles';
+import { NavigationActions } from 'react-navigation'
 var _ = require('lodash/core')
 
 type Issue = {
@@ -23,6 +24,9 @@ type State = {
   data: Array<Issue>
 };
 
+/**
+* Home View for Planner. Display list of defects that are currently unattended to.
+*/ 
 export default class Home extends Component {
   state: State;
   ds:any;
@@ -68,10 +72,23 @@ export default class Home extends Component {
     this.setState({ data: newData });
   }
 
+  _addDefects(){
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'NewTask'
+    })
+    this.props.navigation.dispatch(navigateAction)
+  }
+
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return (
-        <Content theme={theme}>
+      <Container>
+        <Header 
+          title="Home"
+          hasRight
+          iconNameRight="ios-add"
+          handlePressRight={() => this._addDefects()}/>
+        <Content>
           {this.renderHeader()}
           <List
           enableEmptySections
@@ -89,6 +106,7 @@ export default class Home extends Component {
             rightOpenValue={-75}
           />
         </Content>
+        </Container>
       );
   }
 
@@ -108,7 +126,7 @@ export default class Home extends Component {
   )
 
   renderHeader = () => (
-    <ListItem style={styles.listHeader}>
+    <ListItem itemDivider style={styles.listHeader}>
       <Text style={{marginLeft: 20, fontSize: 23, color: primary.normal}}>Priority</Text>
       <View style={{width: 30}}/>
       <Text style={{fontSize: 23, color: primary.normal}}>Task name</Text>
