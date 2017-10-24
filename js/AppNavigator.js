@@ -6,6 +6,7 @@ import Login from './components/login';
 import Planner from './components/planner/';
 import Staff from './components/staff/Staff';
 import NewTask from './components/planner/taskForm'
+import Supervisor from './components/supervisor'
 
 const AppRouteConfigs = {
   Login: {
@@ -21,6 +22,11 @@ const AppRouteConfigs = {
   // Staf specific
   Staff: {
     screen: Staff
+  },
+
+  //Supervisor specific
+  Supervisor: {
+    screen: Supervisor
   }
 }
 
