@@ -8,7 +8,7 @@ const screenHeight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
     incompleteCard: {
-        height: 125,
+        height: 50,
         width: screenWidth - 30,
         borderRadius: 20,
         backgroundColor: 'lightpink',
@@ -16,11 +16,11 @@ export default StyleSheet.create({
         borderColor: 'crimson',
         padding: 20,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         alignSelf: 'center'
     },
     completeCard: {
-        height: 125,
+        height: 50,
         width: screenWidth - 30,
         borderRadius: 20,
         borderWidth: 1,
@@ -28,17 +28,24 @@ export default StyleSheet.create({
         borderColor: 'forestgreen',
         padding: 20,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         alignSelf: 'center'
     },
     incompleteCardText: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'darkred'
     },
     completeCardText: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'darkgreen'
+    },
+    progressBarLabel: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'white',
+        width: 120,
+        padding: 20
     }
 });
