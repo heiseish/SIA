@@ -7,6 +7,9 @@ import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Rig
 import { alert, Header, Button as Btn, primary} from '../../common'
 import firebase from '../../../model/'
 import styles from './styles';
+import Modal from 'react-native-modalbox'
+import InfoCard from '../infoCard'
+import { navigate } from '../../../actions'
 var _ = require('lodash/core')
 
 type Issue = {
@@ -14,19 +17,21 @@ type Issue = {
   priority: number,
   status: string,
   creator: string,
-  id: string
+  id: string,
+  image:? string
 };
 type Props = {
   navigation: any
 };
 type State = {
-  data: Array<Issue>
+  data: Array<Issue>,
+  selected: {} | Issue
 };
 
 /**
 * Recent View for Planner. Display list of defects that have bene attended to.
 */
-export default class History extends Component {
+class History extends Component {
   state: State;
   ds:any;
   props: Props;
@@ -38,6 +43,7 @@ export default class History extends Component {
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       data: [],
+      selected: {}
     };
   }
 
@@ -62,6 +68,9 @@ export default class History extends Component {
     this.listenForDefects(this.defectsRef);
   }
 
+  _toTaskForm(intention: string, defect: Issue | null){
+    this.props.navigate('NewTask', {intention: intention, defect: defect});
+  }
 
 
   deleteRow(secId: number, rowId: number, rowMap: any) {
@@ -69,6 +78,11 @@ export default class History extends Component {
     const newData = [...this.state.data];
     newData.splice(rowId, 1);
     this.setState({ data: newData });
+  }
+
+  _openModal(data: Issue) {
+    this.setState({selected: data})
+    this.refs.modal.open()
   }
 
   render() {
@@ -83,7 +97,7 @@ export default class History extends Component {
             dataSource={this.ds.cloneWithRows(this.state.data)}
             renderRow={this.renderRow.bind(this)}
             renderLeftHiddenRow={data =>
-              <Button full onPress={() => alert(data)}>
+              <Button full onPress={() => this._openModal(data)}>
                 <Icon active name="information-circle" />
               </Button>}
             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
@@ -94,34 +108,54 @@ export default class History extends Component {
             rightOpenValue={-75}
           />
         </Content>
+
+        <Modal
+          style={styles.modal}
+          ref={"modal"}
+          swipeToClose={true}>
+            <InfoCard defect={this.state.selected} 
+            close={() => this.refs.modal.close()}
+            _toTaskForm={this._toTaskForm.bind(this)}/>
+        </Modal>
+
         </Container>
       );
   }
 
   renderRow = (data: any) => (
-    <ListItem style={styles.listItem}>
+    <ListItem button style={styles.listItem} onPress={() => this._openModal(data)}>
       <Left>
-        <Btn style={styles.priorityIndicator} color={data.priority === 3 ? '#b30000' : data.priority === 2 ? '#e68a00' : '#0000e6' } rate={0.5}>
-          <Text style={styles.priorityText}>{data.priority}</Text>
-        </Btn>
-        <Body style={{marginLeft: 50}}>
+        <View style={{...styles.priorityColorIndicator, 
+        backgroundColor: data.priority === 3 ? '#b30000' : data.priority === 2 ? '#e68a00' : '#0000e6'}}/>
+        <View style={styles.priority}>
+          <Button bordered style={styles.priorityIndicator}>
+            <Text style={styles.priorityText}>{data.priority}</Text>
+          </Button>
+          <Text style={styles.underPriorityText}>{data.priority === 3 ? 'High' 
+          : data.priority === 2 ? 'Med' : 'Low'}</Text>
+        </View>
+        <Body style={{marginLeft: 50, marginTop: 15}}>
           <Text style={styles.defectName}>{data.name}</Text>
-          <Text style={styles.info}>Supervisor: {data.supervisor}</Text>
-          <Text style={styles.info} note>Status: <Text 
-          style={{color: data.status === 'Working in Progress' ? primary.normal : 'green'}}>{data.status}</Text>
-          </Text>
+          <Text style={styles.info}>Creator: {data.creator}</Text>
+          <Text note>Status: <Text style={{color: data.status === 'Done' ? 'green' : primary.normal}}>{data.status}</Text></Text>
         </Body>
       </Left>
+      <Right>
+        {data.image && <Image style={styles.image} source={{uri: data.image}}/> }
+      </Right>
     </ListItem>
   )
 
   renderHeader = () => (
-    <ListItem style={styles.listHeader}>
+    <ListItem itemDivider style={styles.listHeader}>
       <Text style={{marginLeft: 20, fontSize: 23, color: primary.normal}}>Priority</Text>
       <View style={{width: 30}}/>
       <Text style={{fontSize: 23, color: primary.normal}}>Task name</Text>
     </ListItem>
   )
-
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  navigate: (route: string, params: any) => dispatch(navigate(route, params))
+})
+export default connect(null, mapDispatchToProps)(History);

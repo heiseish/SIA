@@ -9,6 +9,8 @@ import { primary, secondary } from './color';
 
 export default class Button extends Component {
   render() {
+    let onPress = this.props.onPress || null
+    let onLongPress = this.props.onLongPress || null
     let color = this.props.color || primary.normal
     let rate = this.props.rate || 0.5
     return (
@@ -21,8 +23,9 @@ export default class Button extends Component {
         <LinearGradient
           colors={[color, 
             shadeColor2(color, rate)]}
-          style={{ ...this.props.style, justifyContent: 'center', alignItems:'center' }}>
-          {this.props.icon  ? <Icon active={this.props.active} name={this.props.icon} style={{color: 'white', backgroundColor:'transparent'}}/> : null}
+          style={{ ...this.props.style, justifyContent: 'center', alignItems:'center', flexDirection: 'row'}}>
+          {this.props.icon  ? <Icon active={this.props.active} name={this.props.icon} 
+          style={{color: 'white', backgroundColor:'transparent', marginRight: 10, ...this.props.iconStyle}}/> : null}
           {this.props.children || <Text style={[styles.buttonText, this.props.textStyle]}>
             {this.props.text}
           </Text>}

@@ -6,6 +6,7 @@ export const primary = {
 
 export const secondary = {
 	normal: '#756452',
+	background: '#dbdbd9',
 	light: '#8f602c',
 	dark: '#44382c'
 }

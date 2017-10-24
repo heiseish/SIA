@@ -1,10 +1,10 @@
 //@flow
 'use-strict'
 import React, { Component } from 'react';
-import { Image, View, StatusBar , TextInput, ListView} from 'react-native';
+import { View, StatusBar , TextInput, ListView} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
-import { alert, Header, Button as Btn, primary} from '../../common'
+import { alert, Header, Button as Btn, primary, Image} from '../../common'
 import firebase from '../../../model'
 import { deleteTask } from '../../../model/query/'
 import { navigate } from '../../../actions'
@@ -13,12 +13,14 @@ import Modal from 'react-native-modalbox'
 import InfoCard from '../infoCard'
 var _ = require('lodash/core')
 
+
 type Issue = {
   name: string,
   priority: number,
   status: string,
   creator: string,
-  id: string
+  id: string,
+  image?: string
 };
 type Props = {
   navigate: () => void
@@ -46,7 +48,6 @@ class Home extends Component {
       selected: {}
     };
   }
-
   /**
   * Listen for changes in defect lists on database
   */
@@ -86,8 +87,13 @@ class Home extends Component {
     });
   }
 
-  _addDefects(){
-    this.props.navigate('NewTask');
+  _toTaskForm(intention: string, defect: Issue | null){
+    this.props.navigate('NewTask', {intention: intention, defect: defect});
+  }
+
+  _openModal(data: Issue) {
+    this.setState({selected: data})
+    this.refs.modal.open()
   }
 
   render() {
@@ -98,7 +104,7 @@ class Home extends Component {
           title="Home"
           hasRight
           iconNameRight="ios-add"
-          handlePressRight={() => this._addDefects()}/>
+          handlePressRight={() => this._toTaskForm('add',null)}/>
         <Content>
           {this.renderHeader()}
           <List
@@ -106,7 +112,7 @@ class Home extends Component {
             dataSource={this.ds.cloneWithRows(this.state.data)}
             renderRow={this.renderRow.bind(this)}
             renderLeftHiddenRow={data =>
-              <Button full onPress={() => alert(data)}>
+              <Button full onPress={() => this._openModal(data)}>
                 <Icon active name="information-circle" />
               </Button>}
             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
@@ -122,7 +128,9 @@ class Home extends Component {
           style={styles.modal}
           ref={"modal"}
           swipeToClose={true}>
-            <InfoCard defect={this.state.selected}/>
+            <InfoCard defect={this.state.selected} 
+            close={() => this.refs.modal.close()}
+            _toTaskForm={this._toTaskForm.bind(this)}/>
         </Modal>
 
         </Container>
@@ -130,20 +138,26 @@ class Home extends Component {
   }
 
   renderRow = (data: any) => (
-    <ListItem button style={styles.listItem} onPress={() => { 
-      this.setState({selected: data})
-      this.refs.modal.open()
-    }}>
+    <ListItem button style={styles.listItem} onPress={() => this._openModal(data)}>
       <Left>
-        <Btn style={styles.priorityIndicator} color={data.priority === 3 ? '#b30000' : data.priority === 2 ? '#e68a00' : '#0000e6' } rate={0.5}>
-          <Text style={styles.priorityText}>{data.priority}</Text>
-        </Btn>
-        <Body style={{marginLeft: 50}}>
+        <View style={{...styles.priorityColorIndicator, 
+        backgroundColor: data.priority === 3 ? '#b30000' : data.priority === 2 ? '#e68a00' : '#0000e6'}}/>
+        <View style={styles.priority}>
+          <Button bordered style={styles.priorityIndicator}>
+            <Text style={styles.priorityText}>{data.priority}</Text>
+          </Button>
+          <Text style={styles.underPriorityText}>{data.priority === 3 ? 'High' 
+          : data.priority === 2 ? 'Med' : 'Low'}</Text>
+        </View>
+        <Body style={{marginLeft: 50, marginTop: 15}}>
           <Text style={styles.defectName}>{data.name}</Text>
           <Text style={styles.info}>Creator: {data.creator}</Text>
-          <Text style={styles.info} note>Status: <Text style={{color: 'red'}}>{data.status}</Text></Text>
+          <Text note>Status: <Text style={{color: 'red'}}>{data.status}</Text></Text>
         </Body>
       </Left>
+      <Right>
+        {data.image && <Image style={styles.image} source={{uri: data.image}}/> }
+      </Right>
     </ListItem>
   )
 

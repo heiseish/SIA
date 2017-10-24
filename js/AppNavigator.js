@@ -5,7 +5,7 @@ import { StackNavigator } from 'react-navigation';
 import Login from './components/login';
 import Planner from './components/planner/';
 import Staff from './components/staff/Staff';
-import NewTask from './components/planner/newTask'
+import NewTask from './components/planner/taskForm'
 
 const AppRouteConfigs = {
   Login: {

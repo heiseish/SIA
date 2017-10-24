@@ -2,14 +2,12 @@
 'use strict';
 import React, { Component } from 'react';
 import { Image } from 'react-native';
-import ReactNative from 'react-native';
 const loading = require('./img/loading.jpg');
 export default class SIAImage extends Component {
   props: {
     radius?: number;
-    source: {uri: String};
-    onLoad?: () => void;
-    style: any;
+    source: {uri: string} | any;
+    style?: any;
   };
 
   render() {
@@ -29,7 +27,6 @@ export default class SIAImage extends Component {
           source={
             this.props.source.uri ? { uri: this.props.source.uri} : this.props.source
           }
-          onLoad={this.props.onLoad ? () => this.props.onLoad() : null}
           defaultSource={loading}
       />
     );
