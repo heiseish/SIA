@@ -40,7 +40,7 @@ export default class TaskCard extends Component {
 
     _onWait = (isComplete) => {
         if (isComplete) {
-            const id = setTimeout(this._closeRow, 3000);
+            const id = setTimeout(this._closeRow, 1500);
             this.setState((prevState, props)=>{
                 return {
                     complete: prevState.complete,
