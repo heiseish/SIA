@@ -3,11 +3,25 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import styles from './styles'
+
+type Props = {
+    card_text: string,
+    _collapse: () => void,
+    card_id: number
+};
+
+type State = {
+    complete: boolean,
+    timeoutID: any
+};
 /*
 Represents a TaskCard to be displayed on UI for staff.
 */
 export default class TaskCard extends Component {
-    constructor(props) {
+    state: State;
+    props: Props;
+
+    constructor(props: Props) {
         super(props);
         this.state = {
             complete: false,
@@ -26,7 +40,7 @@ export default class TaskCard extends Component {
 
     _onWait = (isComplete) => {
         if (isComplete) {
-            const id = setTimeout(this.props._collapse, 3000);
+            const id = setTimeout(this._closeRow, 3000);
             this.setState((prevState, props)=>{
                 return {
                     complete: prevState.complete,
@@ -36,6 +50,11 @@ export default class TaskCard extends Component {
         } else {
             clearTimeout(this.state.timeoutID);
         }
+    }
+
+    _closeRow = () => {
+        this.setState({complete: !this.state.complete},
+            () => this.props._collapse())
     }
 
     _onPressCard = () => {

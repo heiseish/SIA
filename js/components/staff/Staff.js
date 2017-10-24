@@ -6,9 +6,19 @@ import { Container, Content, Footer, FooterTab, Button, Icon } from 'native-base
 import * as Progress from 'react-native-progress';
 
 import TaskCard from './TaskCard';
+type Props = {
+    navigate: () => void
+};
+
+type State = {
+    task_number: number,
+    tasks: Array<{task: string, id: number}>
+};
 
 export default class Staff extends Component {
-    constructor(props) {
+    state: State;
+
+    constructor(props: Props) {
         super(props);
         this.state = {
             task_number: 0,
@@ -36,12 +46,7 @@ export default class Staff extends Component {
                 });
             }
         }
-        this.setState((prevState, props)=>{
-            return {
-                task_number: prevState.task_number + 1,
-                tasks: newData
-            };
-        });
+        this.setState({tasks: newData});
     }
 
     render() {
@@ -60,6 +65,8 @@ export default class Staff extends Component {
                 <Content style={{height: 300}}>
                     <FlatList
                         data={this.state.tasks}
+                        keyExtractor={(item, index) => item.id}
+                        extraData={this.state}
                         renderItem={
                             ({item}) => <TaskCard
                                 card_text={item.task}
