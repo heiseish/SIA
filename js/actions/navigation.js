@@ -3,8 +3,7 @@
 
 import type { Action } from './types';
 import { NavigationActions } from 'react-navigation'
-
-type Tab = 'home' | 'recent' | 'setting';
+import type Tab from '../reducers/navigation';
 
 module.exports = {
 	switchTab: (tab: Tab): Action => ({

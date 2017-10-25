@@ -3,7 +3,7 @@
 import AppNavigator from '../AppNavigator';
 import type {Action} from '../actions/types';
 
-export type Tab = 'home' | 'recent' | 'setting';
+export type Tab = 'home' | 'recent' | 'setting'
 type State = {
   tab: Tab;
 };

@@ -4,7 +4,7 @@
 import { StackNavigator } from 'react-navigation';
 import Login from './components/login';
 import Planner from './components/planner/';
-import Staff from './components/staff/Staff';
+import Staff from './components/staff';
 import NewTask from './components/planner/taskForm'
 import Supervisor from './components/supervisor'
 

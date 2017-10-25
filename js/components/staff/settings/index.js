@@ -53,7 +53,7 @@ class Setting extends Component {
           <Image circle radius={40} source={{uri: 'https://s3.amazonaws.com/FringeBucket/default-user.png'}}/>
           <Body>
             <H3>  {this.props.user.name}</H3>
-            <Text>   Planner</Text>
+            <Text>   Staff</Text>
           </Body>
         </Left>
         
