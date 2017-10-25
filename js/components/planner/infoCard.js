@@ -101,7 +101,7 @@ export default class InfoCard extends Component {
   )
 
   _edit() {
-    if (this.props.defect.status === 'Done')
+    if (this.props.defect.status === 'unchecked' || this.props.defect.status === 'completed')
       alert(undefined, 'Cannot edit! The defect has already been dealt with.')
     else {
       this.props.close();

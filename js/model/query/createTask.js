@@ -1,8 +1,10 @@
 //@flow
 'use-strict';
 import firebase from '../';
+import { getTimeUnix } from '../../lib/timeUtil'
 import { getLastId } from './getLastId';
 const defectRef = firebase.database().ref('defects/');
+const time = getTimeUnix();
 export const createTask  = (defect: any, creator: string) => {
 	return new Promise((response,reject) => {
 		if (!defect.name || defect.priority === NaN || !defect.description)
@@ -15,7 +17,8 @@ export const createTask  = (defect: any, creator: string) => {
 					...defect,
 					creator,
 					id,
-					status: 'unattended'
+					status: 'unattended',
+					createdDate: time
 				}).then(() => {
 					response()
 				})

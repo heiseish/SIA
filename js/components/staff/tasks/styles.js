@@ -43,7 +43,7 @@ export default {
   progressBarLabel: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: secondary.normal
+    color: primary.normal
   },
   listItem: {
     height: 100,
@@ -81,7 +81,7 @@ export default {
     color: primary.normal,
   },
   defectName: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: '400'
   },
   modal: {

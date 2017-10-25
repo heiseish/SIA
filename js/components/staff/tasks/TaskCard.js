@@ -35,9 +35,9 @@ export default class TaskCard extends Component {
                   <Text style={styles.underPriorityText}>{card.priority === 3 ? 'High' 
                   : card.priority === 2 ? 'Med' : 'Low'}</Text>
                 </View>
-                <Body style={{marginLeft: 10, marginTop: 15}}>
+                <Body style={{marginLeft: 30, marginTop: 15}}>
                   <Text style={styles.defectName}>{card.name}</Text>
-                  <Text note>Status: <Text style={{color: 'red'}}>{card.status}</Text></Text>
+                  <Text note>Status: <Text style={{color: card.status === 'assigned' ? 'red' : 'green'}}>{card.status === 'assigned' ? 'Not started' : card.status}</Text></Text>
                 </Body>
               </Left>
               <Right>

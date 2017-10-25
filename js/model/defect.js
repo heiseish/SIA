@@ -3,7 +3,7 @@
 export type Defect = {
 	name: string,
 	id: number | string,
-	priority: number,
+	priority: 1 | 2 | 3,
 	createdDate: string,
 	description: string,
 	image?: string,

@@ -16,12 +16,15 @@ type  Props = {
     status: string,
     creator: string,
     id: string,
-    image?: string
+    image?: string,
+    initiateStartOrStop: (any) => void
   },
   close: () => void
 };
 
 export default class InfoCard extends Component {
+  props: Props;
+
   constructor(props: Props) {
     super(props)
   }
@@ -35,7 +38,7 @@ export default class InfoCard extends Component {
         {this.renderHeader('Personels')}
         {defect.supervisor ? <Text style={styles.subTitle}>     Supervised by 
         <Text>                   {defect.supervisor}</Text></Text> : <View style={{height: 30}}/>}
-        {this.renderFooter()}
+        {this.renderFooter(defect, this.props.initiateStartOrStop)}
       </View>
     )
   }
@@ -72,19 +75,20 @@ export default class InfoCard extends Component {
     </View> 
   )
 
-  renderFooter = () => (
+  renderFooter = (defect: any) => (
     <View style={styles.row}>
-        <Button style={styles.button}
-        icon='brush' 
-        onPress={() => this._edit()} 
-        color={secondary.normal}
+        <Button 
+        style={styles.button}
+        icon={defect.status === 'assigned'? 'paper' : 'close'}
+        onPress={() => this.props.initiateStartOrStop(defect)}
+        color={defect.status === 'assigned'? '#43893c' : '#9b1b17'}
         textStyle={{
           fontSize: 25
         }}
         iconStyle={{
           fontSize: 25
         }}
-        text="Edit"/>
+        text={defect.status === 'assigned'? 'Start' : 'Stop'}/>
 
         <Button style={styles.button}
         icon='close' 
@@ -100,15 +104,6 @@ export default class InfoCard extends Component {
     </View>
   )
 
-  _edit() {
-    if (this.props.defect.status === 'Done')
-      alert(undefined, 'Cannot edit! The defect has already been dealt with.')
-    else {
-      this.props.close();
-      this.props._toTaskForm('edit', this.props.defect)
-    }
-
-  }
 }
 
 

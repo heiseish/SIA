@@ -7,7 +7,8 @@ import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Rig
 import { alert, Header, Button as Btn, primary, Image} from '../../common'
 import firebase from '../../../model'
 import { deleteTask } from '../../../model/query/'
-import { navigate } from '../../../actions'
+import { navigate, updateTasks } from '../../../actions'
+import { getPresentableDate } from '../../../lib/timeUtil'
 import styles from './styles';
 import Modal from 'react-native-modalbox'
 import InfoCard from '../infoCard'
@@ -48,6 +49,13 @@ class Home extends Component {
       selected: {}
     };
   }
+  
+
+  componentDidMount() {
+    // start listening for firebase updates
+    this.listenForDefects(this.defectsRef);
+  }
+
   /**
   * Listen for changes in defect lists on database
   */
@@ -58,15 +66,11 @@ class Home extends Component {
         if (child.child('status').val() === 'unattended')
           defects.push(child.val());
       });
+      this.props.updateTasks(defects.length)
       this.setState({
         data: defects.reverse()
       });
     });
-  }
-
-  componentDidMount() {
-    // start listening for firebase updates
-    this.listenForDefects(this.defectsRef);
   }
 
 
@@ -149,9 +153,9 @@ class Home extends Component {
           <Text style={styles.underPriorityText}>{data.priority === 3 ? 'High' 
           : data.priority === 2 ? 'Med' : 'Low'}</Text>
         </View>
-        <Body style={{marginLeft: 50, marginTop: 15}}>
+        <Body style={{marginLeft: 20, marginTop: 15}}>
           <Text style={styles.defectName}>{data.name}</Text>
-          <Text style={styles.info}>Creator: {data.creator}</Text>
+          <Text note>Created by: {data.creator} at {getPresentableDate(data.createdDate)}</Text>
           <Text note>Status: <Text style={{color: 'red'}}>{data.status}</Text></Text>
         </Body>
       </Left>
@@ -163,16 +167,17 @@ class Home extends Component {
 
   renderHeader = () => (
     <ListItem itemDivider style={styles.listHeader}>
-      <Text style={{marginLeft: 20, fontSize: 23, color: primary.normal}}>Priority</Text>
-      <View style={{width: 30}}/>
-      <Text style={{fontSize: 23, color: primary.normal}}>Task name</Text>
+      <Text style={{marginLeft: 15, fontSize: 20, color: primary.normal}}>Priority</Text>
+      <View style={{width: 10}}/>
+      <Text style={{fontSize: 20, color: primary.normal}}>Task name</Text>
     </ListItem>
   )
 
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  navigate: (route: string, params: any) => dispatch(navigate(route, params))
+  navigate: (route: string, params: any) => dispatch(navigate(route, params)),
+  updateTasks: (number: number) => dispatch(updateTasks(number))
 })
 export default connect(null, mapDispatchToProps)(Home);
 

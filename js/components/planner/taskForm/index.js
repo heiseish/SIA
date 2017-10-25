@@ -96,9 +96,12 @@ class NewTask extends Component {
 
     switch (intention) {
       case 'add':
-      alert(() => this._createTask(),
-        'Image has not been selected or uploaded completely yet',
-        'Are you sure you want to create the defect without an image?');
+      if (!this.state.image)
+        alert(() => this._createTask(),
+          'Image has not been selected or uploaded completely yet',
+          'Are you sure you want to create the defect without an image?');
+      else
+        this._createTask()
       break;
 
       case 'edit':
@@ -211,7 +214,7 @@ class NewTask extends Component {
         progress={this.state.progress}
         height={15}
         width={300}
-        color={secondary.normal}
+        color={!this.state.image ? secondary.normal : 'green'}
         borderWidth={1}
      /> : null}
       <Button bordered style={styles.button} onPress={() => this._selectImage()}>

@@ -17,9 +17,9 @@ type Props = {
 class Setting extends Component {
   props: Props;
   static data = [
-    'View defects by status: Home -> unattended, Recent -> the rest',
-    'Add a new defect with name, priority, description and image',
-    'Edit a defect'
+    'Start and stop the task fixing a specific defect. Only 1 task can be carried out at any time!',
+    'View the defect info.',
+    'The status will change to `busy` when a task is started and return to `free` when it is done!'
   ]
 
   render() {
@@ -50,10 +50,12 @@ class Setting extends Component {
     <Card style={{height: 120}}>
       <CardItem header style={{flexDirection: 'row'}}>
         <Left>
-          <Image circle radius={40} source={{uri: 'https://s3.amazonaws.com/FringeBucket/default-user.png'}}/>
+          <Image circle radius={40} source={{uri: 'https://s3.amazonaws.com/FringeBucket/default-user.png'}}
+          style={{borderWidth: 1, borderColor: this.props.user.status === 'busy' ? 'red' : 'green'}}/>
           <Body>
             <H3>  {this.props.user.name}</H3>
             <Text>   Staff</Text>
+            <Text note>   Status:  <Text style={{color: this.props.user.status ? 'green' : 'red'}}>{this.props.user.status}</Text></Text>
           </Body>
         </Left>
         

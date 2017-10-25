@@ -4,5 +4,6 @@ export type Staff = {
 	name: string,
 	id: string,
 	status: 'free' | 'busy',
-	location?: string
+	location?: string,
+	defectClearedToday: number
 }

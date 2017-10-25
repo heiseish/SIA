@@ -12,7 +12,7 @@ export default {
     height: 100
   },
   listHeader: {
-    height: 60,
+    height: 55,
     marginLeft: -20,
     width: Dimensions.get('window').width + 20,
     flexDirection: 'row',
@@ -42,7 +42,7 @@ export default {
     color: primary.normal,
   },
   defectName: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: '400'
   },
   modal: {
