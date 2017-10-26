@@ -9,7 +9,8 @@ export const assign = async (supervisor: string, staff: Staff, defect: Defect, o
       ...defect,
       supervisor: supervisor,
       status: 'assigned',
-      staff: staff.name
+      staff: staff.name,
+      staffId: staff.id
     }
     let newStaff = staff
     // doesn't have anything yet

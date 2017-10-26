@@ -9,16 +9,14 @@ export default class StaffCard extends Component {
   render() {
     const staffName = this.props.name;
     return (
-      <View
-      style={{padding: 5, width: 120, height: 100, alignItems: 'center'}}
-      >
+      <View style={{width: 100, height: 100, flexDirection: 'column'}}>
         <Image
         circle
         radius={35}
         source={{uri:'https://s3.amazonaws.com/FringeBucket/default-user.png'}}
          />
         <View style={{height:20, width:80, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.nameLabel}>{staffName.substr(0, staffName.indexOf(' '))}</Text>
+          <Text style={styles.nameLabel}>{staffName}</Text>
         </View>
       </View>
     );

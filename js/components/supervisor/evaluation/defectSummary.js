@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, Platform} from 'react-native';
 import { Image, primary, secondary, Button, alert } from '../../common'
 import { Text, View, Icon } from 'native-base';
+import { getPresentableDateAndTimeFromUnix } from '../../../lib'
 import { connect } from 'react-redux';
 let ios = Platform.OS === 'ios'
 const width = Dimensions.get('window').width
@@ -17,11 +18,10 @@ type  Props = {
     creator: string,
     id: string,
     image?: string
-  },
-  close: () => void
+  }
 };
 
-export default class InfoHistory extends Component {
+export default class DefectSummary extends Component {
   constructor(props: Props) {
     super(props)
   }
@@ -37,7 +37,8 @@ export default class InfoHistory extends Component {
         <Text>                   {defect.supervisor}</Text></Text> : <View style={{height: 30}}/>}
         {defect.staff ? <Text style={styles.subTitle}>     Technician support 
         <Text>           {defect.staff}</Text></Text> : <View style={{height: 30}}/>}
-        {this.renderFooter()}
+        <Text style={styles.subTitle}>     Started at <Text>     {getPresentableDateAndTimeFromUnix(defect.startTime)}</Text></Text>
+        <Text style={styles.subTitle}>     Ended at <Text>       {getPresentableDateAndTimeFromUnix(defect.endTime)}</Text></Text>
       </View>
     )
   }
@@ -74,19 +75,6 @@ export default class InfoHistory extends Component {
     </View> 
   )
 
-  renderFooter = () => (
-        <Button style={styles.button}
-        icon='close' 
-        onPress={() => this.props.close()} 
-        textStyle={{
-          fontSize: 25
-        }}
-        iconStyle={{
-          fontSize: 25,
-        }}
-        color={primary.normal}
-        text="Close"/>
-  )
 
 }
 
@@ -95,25 +83,19 @@ export default class InfoHistory extends Component {
 
 const styles = {
   container: {
-    height: 550,
     flexDirection: 'column',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    marginBottom: 5
   },
   header: {
     width: width,
     height: 60,
     marginBottom: 0,
     borderWidth: 1,
-    borderColor: secondary.normal
+    borderColor: primary.normal
   },
   title: {
     fontSize: 30,
     fontStyle: 'italic',
-    color: secondary.normal,
+    color: primary.normal,
     backgroundColor: 'transparent',
     alignSelf: 'flex-start',
     marginLeft: 30
@@ -160,6 +142,12 @@ const styles = {
   },
 
   button: {
+    width: 190,
+    height: 50,
+    borderRadius: 30
+  },
+
+  buttonCenter: {
     width: 190,
     height: 50,
     borderRadius: 30,

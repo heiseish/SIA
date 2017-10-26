@@ -57,6 +57,7 @@ export default {
   },
   info: {
     fontStyle:'italic',
+    fontSize: 10,
     fontWeight: '400'
   },
   priority: {

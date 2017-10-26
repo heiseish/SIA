@@ -11,6 +11,7 @@ export type Defect = {
 	creator: string,
 	supervisor?: string,
 	staff?: string,
+	staffId?: string,
 	startTime?: string,
 	endTime?: string,
 	review?: string,

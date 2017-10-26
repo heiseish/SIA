@@ -21,6 +21,6 @@ export const getPresentableDate = (unix: string) => {
 
 export const getPresentableTime = (unix: string) => {
 	const str = getPresentableDateAndTimeFromUnix(unix)
-	return str.substring(str.lastIndexOf(','));
+	return str.substring(str.lastIndexOf(',') + 1);
 }
 

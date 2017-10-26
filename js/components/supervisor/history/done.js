@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Container, View, Content, Icon, List, ListItem, Text, Left, Body, Right, Button as Btn} from 'native-base';
 import { alert, Header, Button, primary, Image} from '../../common'
 import firebase from '../../../model/'
-import { getPresentableDateAndTimeFromUnix } from '../../../lib'
+import { getPresentableTime} from '../../../lib'
 import styles from './styles';
 import Modal from 'react-native-modalbox'
 import { navigate } from '../../../actions'
@@ -83,7 +83,7 @@ class Done extends Component {
   }
 
   _renderItem = ({item}) => (
-    <ListItem button style={styles.listItem}>
+    <ListItem button style={styles.listItem} onPress={() => this.props.navigate('StaffEvaluation', item)}>
         <Left>
           <View style={{...styles.priorityColorIndicator,
           backgroundColor: item.priority === 3 ? '#b30000' : item.priority === 2 ? '#e68a00' : '#0000e6'}}/>
@@ -96,7 +96,8 @@ class Done extends Component {
           </View>
           <Body style={{marginLeft: 20, marginTop: item.status === 'ongoing' ? 5 : 15}}>
             <Text style={styles.defectName}>{item.name}</Text>
-            {item.status === 'ongoing' ? <Text style={styles.info}>Started at: {getPresentableDateAndTimeFromUnix(item.startTime)}</Text> : null}
+            <Text style={styles.info}>Started at: {getPresentableTime(item.startTime)}</Text>
+            <Text style={styles.info}>Ended at: {getPresentableTime(item.endTime)}</Text>
             <Text note>Status: <Text style={{color: item.status === 'ongoing' ? 'green' : 'red'}}>{item.status}</Text></Text>
           </Body>
         </Left>
