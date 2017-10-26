@@ -7,6 +7,7 @@ const editTask = require('./editTask')
 const uploadImage = require('./uploadImage')
 const startTask = require('./startTask')
 const stopTask = require('./stopTask')
+const assign = require('./assign')
 module.exports =  {
 	...signIn,
 	...createTask,
@@ -14,5 +15,6 @@ module.exports =  {
 	...editTask,
 	...uploadImage,
 	...startTask,
-	...stopTask
+	...stopTask,
+	...assign
 }

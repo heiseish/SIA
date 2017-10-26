@@ -74,17 +74,13 @@ export default class InfoCard extends Component {
 
   renderFooter = () => (
     <View style={styles.row}>
-        <Button style={styles.button}
-        icon='brush' 
-        onPress={() => this._edit()} 
-        color={secondary.normal}
-        textStyle={{
-          fontSize: 25
-        }}
-        iconStyle={{
-          fontSize: 25
-        }}
-        text="Edit"/>
+        {this.props.defect.status === 'ongoing' ? null : <Button style={styles.button}
+        icon={this.props.defect.status === 'unattended' ? 'paper' : 'analytics'}
+        onPress={() => this.props.handlePress()} 
+        color={this.props.defect.status === 'unattended' ? '#43893c' : secondary.normal}
+        textStyle={{fontSize: 25 }}
+        iconStyle={{ fontSize: 25 }}
+        text={this.props.defect.status === "unattended" ? 'Assign' : 'Review'}/>}
 
         <Button style={styles.button}
         icon='close' 
@@ -100,15 +96,6 @@ export default class InfoCard extends Component {
     </View>
   )
 
-  _edit() {
-    if (this.props.defect.status === 'Done')
-      alert(undefined, 'Cannot edit! The defect has already been dealt with.')
-    else {
-      this.props.close();
-      this.props._toTaskForm('edit', this.props.defect)
-    }
-
-  }
 }
 
 

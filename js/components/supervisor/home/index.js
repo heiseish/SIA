@@ -1,77 +1,51 @@
 //@flow
 'use-strict'
 import React, { Component } from 'react';
-import { View, StatusBar , TextInput, ListView, FlatList, Dimensions, PanResponder, Animated } from 'react-native';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
+import { Container, View, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
 import { alert, Header, Button as Btn, primary, Image} from '../../common'
 import firebase from '../../../model'
 import { deleteTask } from '../../../model/query/'
-import { navigate } from '../../../actions'
+import { navigate, updateTasks } from '../../../actions'
 import styles from './styles'
 import Modal from 'react-native-modalbox'
 import InfoCard from '../infoCard'
 import StaffBubble from './StaffBubble'
-var _ = require('lodash/core')
-
-type Issue = {
-  name: string,
-  priority: number,
-  status: string,
-  creator: string,
-  id: string,
-  image?: string
-};
 
 type Props = {
-  navigate: () => void
+  navigate: () => void,
+  updateTasks: (number) => void
 };
 
 type State = {
-  data: Array<Issue>,
-  selected: Issue | {}
+  defectData: Array<any>,
+  staffData: Array<any>,
+  selectedDefect: any,
+  selectedStaff: any
 };
 
 type StaffStatus = 'free' | 'busy';
-
-const widthScreen = Dimensions.get('window').width;
-const heightScreen = Dimensions.get('window').height;
 /**
 * Home View for Planner. Display list of defects that are currently unattended to.
 */
 class Home extends Component {
   state: State;
-  ds:any;
   props: Props;
   defectsRef: any;
   staffRef: any;
+  panResponder: any;
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      data: [],
+      defectData: [],
       staffData: [],
-      selected: {},
-      scroll: true,
-      pan: new Animated.ValueXY()
+      selectedDefect: {},
+      selectedStaff: {}
     };
     this.defectsRef = firebase.database().ref('defects');
     this.staffRef = firebase.database().ref('staff');
-    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onPanResponderGrant: () => this.setState({scroll: false}),
-      onPanResponderMove: Animated.event([null, {
-        dx : this.state.pan.x,
-        dy : this.state.pan.y
-      }]),
-      onPanResponderRelease: (e, gesture) => {
-        this.setState({scroll:true});
-      },
-    });
   }
   /**
   * Listen for changes in defect lists on database
@@ -83,8 +57,9 @@ class Home extends Component {
         if (child.child('status').val() === 'unattended')
           defects.push(child.val());
       });
+      this.props.updateTasks(defects.length);
       this.setState({
-        data: defects.reverse()
+        defectData: defects.reverse()
       });
     });
   }
@@ -110,145 +85,123 @@ class Home extends Component {
     this.listenForStaff(this.staffRef);
   }
 
-
-  initiateDelete(secId: number, rowId: number, rowMap: any) {
-    alert(() => this.deleteRow(secId, rowId, rowMap),
-      'Proceeding to delete defect',
-      'Are you sure you want to delete the defect?')
-  }
-
-  deleteRow(secId: number, rowId: number, rowMap: any) {
-    rowMap[`${secId}${rowId}`].props.closeRow();
-    // const newData = [...this.state.data];
-    // newData.splice(rowId, 1);
-    // this.setState({ data: newData });
-
-    deleteTask(this.state.data[rowId].id).then(() => {
-      alert(undefined, 'Success!', 'The defect has been successfully deleted!');
-    });
-  }
-
-  _toTaskForm(intention: string, defect: Issue | null){
-    this.props.navigate('NewTask', {intention: intention, defect: defect});
-  }
-
-  _openModal(data: Issue) {
-    this.setState({selected: data})
-    this.refs.modal.open()
+  _openModal(ref: string, data: any) {
+    if (ref === 'modal1') {
+      this.setState({selectedDefect: data})
+      this.refs.modal1.open()
+    } else {
+      this.setState({selectedStaff: data})
+      this.refs.modal2.open()
+    }
+    
   }
 
   render() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return (
-      <View style={{flex: 1}}>
-        <Header
-          title="Home"
-          hasRight
-          iconNameRight="ios-add"
-          handlePressRight={() => this._toTaskForm('add',null)}/>
-        <Content scrollEnabled={this.state.scroll}>
+      <Container>
+        <Header title="Home"/>
+        <Content>
           {this.renderStaffList()}
           {this.renderHeader()}
-          <List
-            enableEmptySections
-            dataSource={this.ds.cloneWithRows(this.state.data)}
-            renderRow={this.renderRow.bind(this)}
-            renderLeftHiddenRow={data =>
-              <Button full onPress={() => this._openModal(data)}>
-                <Icon active name="information-circle" />
-              </Button>}
-            renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-              <Button full danger onPress={_ => this.initiateDelete(secId, rowId, rowMap)}>
-                <Icon active name="trash" />
-              </Button>}
-            leftOpenValue={75}
-            rightOpenValue={-75}
+          <FlatList
+            data={this.state.defectData}
+            extraData={this.state}
+            keyExtractor={(item, index) => item.id}
+            renderItem={this._renderItem}
           />
+     
         </Content>
 
         <Modal
           style={styles.modal}
-          ref={"modal"}
+          ref={"modal1"}
           swipeToClose={true}>
-            <InfoCard defect={this.state.selected}
-            close={() => this.refs.modal.close()}
-            _toTaskForm={this._toTaskForm.bind(this)}/>
+            <InfoCard defect={this.state.selectedDefect}
+            handlePress={() => this._assign(this.state.selectedDefect)}
+            close={() => this.refs.modal.close()}/>
         </Modal>
 
-      </View>
+      </Container>
       );
   }
 
-  renderRow = (data: any) => (
-    <Animated.View
-    {...this.panResponder.panHandlers}
-    style={[this.state.pan.getLayout(), {height:100}]}>
-      <ListItem button style={styles.listItem} onPress={() => this._openModal(data)}>
+  _assign = (defect: any) => {
+    this.refs.modal1.close()
+    this.props.navigate('Assign', defect)
+  }
+
+
+
+  _renderItem = ({item}) => (
+      <ListItem button style={styles.listItem} onPress={() => this._openModal('modal1', item)}
+      >
         <Left>
           <View style={{...styles.priorityColorIndicator,
-          backgroundColor: data.priority === 3 ? '#b30000' : data.priority === 2 ? '#e68a00' : '#0000e6'}}/>
+          backgroundColor: item.priority === 3 ? '#b30000' : item.priority === 2 ? '#e68a00' : '#0000e6'}}/>
           <View style={styles.priority}>
             <Button bordered style={styles.priorityIndicator}>
-              <Text style={styles.priorityText}>{data.priority}</Text>
+              <Text style={styles.priorityText}>{item.priority}</Text>
             </Button>
-            <Text style={styles.underPriorityText}>{data.priority === 3 ? 'High'
-            : data.priority === 2 ? 'Med' : 'Low'}</Text>
+            <Text style={styles.underPriorityText}>{item.priority === 3 ? 'High'
+            : item.priority === 2 ? 'Med' : 'Low'}</Text>
           </View>
-          <Body style={{marginLeft: 50, marginTop: 15}}>
-            <Text style={styles.defectName}>{data.name}</Text>
-            <Text style={styles.info}>Creator: {data.creator}</Text>
-            <Text note>Status: <Text style={{color: 'red'}}>{data.status}</Text></Text>
+          <Body style={{marginLeft: 30, marginTop: 15}}>
+            <Text style={styles.defectName}>{item.name}</Text>
+            <Text style={styles.info}>Creator: {item.creator}</Text>
+            <Text note>Status: <Text style={{color: 'red'}}>{item.status}</Text></Text>
           </Body>
         </Left>
         <Right>
-          {data.image && <Image style={styles.image} source={{uri: data.image}}/> }
+          {item.image && <Image style={styles.image} source={{uri: item.image}}/> }
         </Right>
       </ListItem>
-    </Animated.View>
   )
+
 
   renderHeader = () => (
     <ListItem itemDivider style={styles.listHeader}>
-      <Text style={{marginLeft: 20, fontSize: 23, color: primary.normal}}>Priority</Text>
-      <View style={{width: 30}}/>
-      <Text style={{fontSize: 23, color: primary.normal}}>Task name</Text>
+      <Text style={{marginLeft: 10, fontSize: 18, color: primary.normal}}>Priority</Text>
+      <View style={{width: 15}}/>
+      <Text style={{fontSize: 18, color: primary.normal}}>Task name</Text>
     </ListItem>
   )
 
 
   renderStaffList = () => (
-    <View style={{height: 100, width: widthScreen - 20, justifyContent: 'center', alignItems: 'center'}}>
+    <ListItem style={styles.staffList}>
       <FlatList
+        ref={"staffList"}
+        scrollEnabled={!this.state.animating}
         horizontal={true}
         data={this.state.staffData}
-        keyExtractor={this._staffKeyExtractor}
-        renderItem={this._renderStaff}
+        keyExtractor={(item, index) => item.id}
+        renderItem={this.renderStaff}
        />
-    </View>
+    </ListItem>
   )
 
-  _staffKeyExtractor = (item, index) => item.id;
-
-  _renderStaff = ({item}) => (
-    <StaffBubble name={item.name} status={item.status} />
-  );
-
-  renderDraggable = () => {
-    return (
-      <View style={styles.draggableContainer}>
-        <Animated.View
-          {...this.panResponder.panHandlers}
-          style={[this.state.pan.getLayout(), styles.circle]}
-        >
-          <Text style={styles.text}>Drag me!</Text>
-        </Animated.View>
-      </View>
-    );
-  }
+ 
+  renderStaff = ({item}) => (
+        <View style={{width: 80, height: 80, alignItems: 'center', justifyContent: 'center'}}>
+          <Image
+          circle
+          radius={30}
+          source={{uri:'https://s3.amazonaws.com/FringeBucket/default-user.png'}}
+          style={{borderWidth:1, borderColor:this.props.status === 'busy' ? 'red' : 'green'}}
+           />
+          <View style={{height:20, width:80, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View
+            style={item.status === 'busy' ? styles.statusCircleBusy : styles.statusCircleFree}
+             />
+            <Text style={styles.nameLabel}>{item.name.substr(0, item.name.indexOf(' '))}</Text>
+          </View>
+        </View>
+  )
 
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  navigate: (route: string, params: any) => dispatch(navigate(route, params))
+  navigate: (route: string, params: any) => dispatch(navigate(route, params)),
+  updateTasks: (number: number) => dispatch(updateTasks(number))
 })
 export default connect(null, mapDispatchToProps)(Home);

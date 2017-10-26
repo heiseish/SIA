@@ -134,10 +134,10 @@ class History extends Component {
           <Text style={styles.underPriorityText}>{data.priority === 3 ? 'High' 
           : data.priority === 2 ? 'Med' : 'Low'}</Text>
         </View>
-        <Body style={{marginLeft: 50, marginTop: 15}}>
+        <Body style={{marginLeft: 20, marginTop: 15}}>
           <Text style={styles.defectName}>{data.name}</Text>
           <Text style={styles.info}>Creator: {data.creator}</Text>
-          <Text note>Status: <Text style={{color: data.status === 'Done' ? 'green' : primary.normal}}>{data.status}</Text></Text>
+          <Text note>Status: <Text style={{color: data.status === 'completed' ? 'green' : primary.normal}}>{data.status}</Text></Text>
         </Body>
       </Left>
       <Right>
@@ -148,9 +148,9 @@ class History extends Component {
 
   renderHeader = () => (
     <ListItem itemDivider style={styles.listHeader}>
-      <Text style={{marginLeft: 20, fontSize: 23, color: primary.normal}}>Priority</Text>
-      <View style={{width: 30}}/>
-      <Text style={{fontSize: 23, color: primary.normal}}>Task name</Text>
+      <Text style={{marginLeft: 15, fontSize: 20, color: primary.normal}}>Priority</Text>
+      <View style={{width: 10}}/>
+      <Text style={{fontSize: 20, color: primary.normal}}>Task name</Text>
     </ListItem>
   )
 }

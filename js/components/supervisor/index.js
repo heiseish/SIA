@@ -34,12 +34,12 @@ class TabView extends React.Component {
           {this.renderSelectedTab()}
           <Footer>
             <FooterTab>
-              <Button vertical badge
-                  active={this.props.tab === 'home'} 
-                  onPress={() => this.onTabSelect('home')} >
-                  <Badge ><Text>2</Text></Badge>
-                <Icon name={this.props.tab === 'home' ? "ios-home" : "ios-home-outline"} 
-                active={this.props.tab === 'home'}
+              <Button vertical badge={this.props.tasks ? true : false}
+              active={this.props.tab === 'home'} 
+              onPress={() => this.onTabSelect('home')} >
+              {this.props.tasks ? <Badge ><Text>{this.props.tasks}</Text></Badge> : null}
+                <Icon name={this.props.tab === 'home' ? "ios-paper" : "ios-paper-outline"} 
+                active={this.props.tab === 'paper'}
                 />
                 <Text>Home</Text>
               </Button>
@@ -85,6 +85,7 @@ class TabView extends React.Component {
 }
 const mapStateToProps = (store) =>  ({
   tab: store.nav.tab,
+  tasks: store.tasks.number
   // notificationsBadge: unseenNotificationsCount(store) + store.surveys.length,
 
 });

@@ -6,18 +6,23 @@ const { StyleSheet, Dimensions, Platform } = React;
 import { primary, secondary } from '../../common'
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-let CIRCLE_RADIUS = 36;
+let CIRCLE_RADIUS = 40;
 
 export default {
+  staffList: {
+    marginLeft: -1,
+    width: deviceWidth,
+    backgroundColor: 'white',
+    height: 115
+  },
   listItem: {
+    marginLeft: -1,
     height: 100
   },
   listHeader: {
-  	height: 60,
-  	marginLeft: -20,
-  	width: Dimensions.get('window').width + 20,
-  	flexDirection: 'row',
-  	padding: 20
+  	height: 50,
+  	width: deviceWidth,
+  	flexDirection: 'row'
   },
   priorityColorIndicator: {
     height: 100,
@@ -43,7 +48,7 @@ export default {
   	color: primary.normal,
   },
   defectName: {
-  	fontSize: 25,
+  	fontSize:  18,
   	fontWeight: '400'
   },
   modal: {
@@ -75,6 +80,7 @@ export default {
     borderRadius: 4
   },
   nameLabel: {
+    backgroundColor: 'transparent',
     padding: 4,
     width: 50
   },
@@ -84,10 +90,12 @@ export default {
     left        : deviceWidth/2 - CIRCLE_RADIUS,
   },
   circle      : {
-    backgroundColor     : '#1abc9c',
-    width               : CIRCLE_RADIUS*2,
-    height              : CIRCLE_RADIUS*2,
-    borderRadius        : CIRCLE_RADIUS
+    backgroundColor : '#1abc9c',
+    width : CIRCLE_RADIUS*2,
+    height : CIRCLE_RADIUS*2,
+    borderRadius : CIRCLE_RADIUS,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   text        : {
     marginTop   : 25,
@@ -95,5 +103,20 @@ export default {
     marginRight : 5,
     textAlign   : 'center',
     color       : '#fff'
+  },
+
+  animating: {
+    position: 'absolute',
+    flex: 1,
+    height: 90, 
+    width: 90,
+    borderRadius: 45,
+    top: 30,
+    left: 30
+  },
+  nonAnimating: {
+    position: null,
+    width: null,
+    height: null
   }
 };

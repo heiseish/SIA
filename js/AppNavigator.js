@@ -7,6 +7,7 @@ import Planner from './components/planner/';
 import Staff from './components/staff';
 import NewTask from './components/planner/taskForm'
 import Supervisor from './components/supervisor'
+import Assign from './components/supervisor/assign'
 
 const AppRouteConfigs = {
   Login: {
@@ -27,7 +28,11 @@ const AppRouteConfigs = {
   //Supervisor specific
   Supervisor: {
     screen: Supervisor
+  },
+  Assign: {
+    screen: Assign
   }
+
 }
 
 const StackNavigatorConfig = {

@@ -19,7 +19,8 @@ type Props = {
     navigate: () => void,
     tasksCompleted: number,
     status: 'free' | 'busy',
-    user: any
+    user: any,
+    updateTasks : (number) => void
 };
 
 type State = {
@@ -159,11 +160,13 @@ class Tasks extends Component {
             alert(undefined,"You're currently working on another task! Please click finish that task before starting a new one.")
         else {
             startTask(this.props.user, defect)
+            alert(undefined, 'Sucess!', 'Good luck on the task!')
         }
     }
 
     _stopTask(defect: Defect) {
         stopTask(this.props.user, defect)
+        alert(undefined, 'Success!', 'Your task has successfully been registered as complete!')
     }
 }
 
