@@ -1,7 +1,7 @@
 //@flow
 'use-strict'
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, View, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
 import { alert, Header, Button as Btn, primary, Image} from '../../common'
@@ -11,7 +11,7 @@ import { navigate, updateTasks } from '../../../actions'
 import styles from './styles'
 import Modal from 'react-native-modalbox'
 import InfoCard from '../infoCard'
-import StaffBubble from './StaffBubble'
+import StaffCard from '../staffCard'
 
 type Props = {
   navigate: () => void,
@@ -118,7 +118,15 @@ class Home extends Component {
           swipeToClose={true}>
             <InfoCard defect={this.state.selectedDefect}
             handlePress={() => this._assign(this.state.selectedDefect)}
-            close={() => this.refs.modal.close()}/>
+            close={() => this.refs.modal1.close()}/>
+        </Modal>
+
+        <Modal
+          style={styles.modal}
+          ref={"modal2"}
+          swipeToClose={true}>
+            <StaffCard staff={this.state.selectedStaff}
+            close={() => this.refs.modal2.close()}/>
         </Modal>
 
       </Container>
@@ -182,6 +190,7 @@ class Home extends Component {
 
  
   renderStaff = ({item}) => (
+      <TouchableWithoutFeedback onPress={() => this._openModal('modal2', item)}>
         <View style={{width: 80, height: 80, alignItems: 'center', justifyContent: 'center'}}>
           <Image
           circle
@@ -196,6 +205,7 @@ class Home extends Component {
             <Text style={styles.nameLabel}>{item.name.substr(0, item.name.indexOf(' '))}</Text>
           </View>
         </View>
+      </TouchableWithoutFeedback>
   )
 
 }

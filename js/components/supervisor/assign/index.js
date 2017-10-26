@@ -110,8 +110,8 @@ class Assign extends Component {
             <Text>   Staff</Text>
             <Text note>   Status:  <Text style={{color: item.status === 'free' ? 'green' : 'red'}}>{item.status}</Text></Text>
             {item.current ? <Text note>   Curent task:  <Text style={{color: item.status === 'free' ? 'green' : 'red', alignSelf: 'center'}}>
-            {Object.keys(item.current).filter(id => item.current[id].status === 'ongoing')[0] ?
-            item.current[Object.keys(item.current).filter(id => item.current[id].status === 'ongoing')[0]].name : ''}</Text></Text> : null}
+            {Object.values(item.current).filter(task => task.status === 'ongoing')[0] ?
+            Object.values(item.current).filter(task => task.status === 'ongoing')[0].name : ''}</Text></Text> : null}
           </Body>
         </Left>
       </ListItem>
