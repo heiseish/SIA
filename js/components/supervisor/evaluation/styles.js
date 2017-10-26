@@ -8,7 +8,7 @@ export default {
     padding: 4,
     width: 100,
     fontSize: 20,
-    width: 50
+    width: 50,
     width: 100,
     fontSize: 20,
   },
