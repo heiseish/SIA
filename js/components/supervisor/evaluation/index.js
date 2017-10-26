@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { View, TextInput, ListView, FlatList, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
+import StarRating from 'react-native-star-rating';
+
 import { alert, Header, Button as Btn, primary, Image} from '../../common'
 import firebase from '../../../model'
 import { deleteTask } from '../../../model/query/'
@@ -18,81 +20,55 @@ type Props = {
   user: any
 };
 
-class EvaluationView extends Component {
+const deviceWidth = Dimensions.get('window').height;
 
-  staffRef: any;
+class EvaluationView extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      selected: {},
-      staffData: [],
+      starCount: 0,
     };
-    this.staffRef = firebase.database().ref('staff');
   }
 
-  /**
-  * Listen for changes in staff lists on database
-  */
-  listenForStaff(staffRef: any) {
-    staffRef.on('value', (dataSnapshot) => {
-      var updatedStaff = [];
-      dataSnapshot.forEach((staff) => {
-        updatedStaff.push(staff.val());
-      });
-      this.setState({
-        staffData: updatedStaff
-      });
+  onStarRatingPress = (rating) => {
+    this.setState({
+      starCount: rating
     });
   }
 
-  componentDidMount() {
-    // start listening for firebase updates
-    this.listenForStaff(this.staffRef);
+  updateRating = (staffName, defectId) => {
+    //update rating to firebase goes here
   }
-
-  openModalBox = () => {
-    this.refs.modal.open();
-  }
-
-  openStaffInfo = (staffId) => {
-    const cloneStaff = this.state.staffData;
-    var i;
-    for (i = 0; i < cloneStaff.length; i++) {
-      if (cloneStaff[i].id === staffId) {
-        this.setState((prev) => ({
-          selected: cloneStaff[i],
-          staffData: prev.staffData
-        }), () => this.openModalBox());
-        break;
-      }
-    }
-  }
-
-  staffKeyExtractor = (item, index) => item.id;
-
-  renderStaffRow = ({item}) => (
-    <StaffCard name={item.name} status={item.status} onClick={() => this.openStaffInfo(item.id)} />
-  );
 
   render() {
+    /*Needs 2 navigation params - staff Title and defectID*/
+    const staffTitle = this.props.navigation.params.name;
+    const defectID = this.props.navigation.params.defectId;
     return (
-      <View style={{flex: 1}}>
-        <Header title="Evaluation" />
-        <Content>
-          <FlatList
-            data={this.state.staffData}
-            keyExtractor={this.staffKeyExtractor}
-            renderItem={this.renderStaffRow.bind(this)}
+      <Container>
+        <Header
+        title={staffTitle}
+        hasLeft
+        iconNameLeft="arrow-back"
+        handlePressLeft={() => this._pop()}
+        />
+        <View style={{flex: 1}}>
+          <View style={{height:120,width:deviceWidth}}>
+            <StaffCard name={staffTitle} />
+          </View>
+          <View style={{height:70,width:deviceWidth}}>
+            <Text style={{padding:5,fontSize:30}}>Rate {staffTitle} work!</Text>
+          </View>
+          <StarRating
+            disabled={false}
+            maxStars={5}
+            rating={this.state.starCount}
+            selectedStar={(rating) => this.onStarRatingPress(rating)}
            />
-        </Content>
-        <Modal
-          style={styles.modal}
-          ref={"modal"}
-          swipeToClose={true}>
-            <Text>Display info about what {this.state.selected.name} did!</Text>
-        </Modal>
-      </View>
+           <Button primary onPress={()=>this.updateRating(staffName, defectId)}><Text>Update Rating</Text></Button>
+        </View>
+      </Container>
     );
   }
 }

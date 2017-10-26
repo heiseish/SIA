@@ -10,10 +10,9 @@ import { primary, secondary, Header } from '../common';
 import HomeView from './home';
 import HistoryView from './history';
 import SettingView from './setting';
-import EvaluationView from './evaluation';
 import { Container, Content, Footer, FooterTab, Button, Icon, Text, Badge, StyleProvider } from 'native-base';
 
-type Tab = 'home' | 'recent' | 'setting' | 'evaluation';
+type Tab = 'home' | 'recent' | 'setting';
 
 class TabView extends React.Component {
   props: {
@@ -54,14 +53,6 @@ class TabView extends React.Component {
                 <Text>Recent</Text>
               </Button>
 
-              <Button vertical
-                  active={this.props.tab === 'evaluation'}
-                  onPress={() => this.onTabSelect('evaluation')} >
-                <Icon name={this.props.tab === 'evaluation' ? 'trophy' : 'trophy-outline' }
-                active={this.props.tab === 'home'}/>
-                <Text>Evaluate</Text>
-              </Button>
-
               <Button vertical badge
                   active={this.props.tab === 'setting'}
                   onPress={() => this.onTabSelect('setting')} >
@@ -84,9 +75,6 @@ class TabView extends React.Component {
 
       case 'recent':
       return <HistoryView navigation={this.props.navigation}/>
-
-      case 'evaluation':
-      return <EvaluationView navigation={this.props.navigation} />
 
       default:
       return <SettingView navigation={this.props.navigation}/>

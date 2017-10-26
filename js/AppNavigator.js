@@ -6,6 +6,7 @@ import Login from './components/login';
 import Planner from './components/planner/';
 import Staff from './components/staff';
 import NewTask from './components/planner/taskForm'
+import StaffEvaluation from './components/supervisor/evaluation'
 import Supervisor from './components/supervisor'
 import Assign from './components/supervisor/assign'
 
@@ -31,6 +32,9 @@ const AppRouteConfigs = {
   },
   Assign: {
     screen: Assign
+  },
+  StaffEvaluation: {
+    screen: StaffEvaluation
   }
 
 }
