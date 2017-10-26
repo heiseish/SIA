@@ -10,9 +10,10 @@ import { primary, secondary, Header } from '../common';
 import HomeView from './home';
 import HistoryView from './history';
 import SettingView from './setting';
+import EvaluationView from './evaluation';
 import { Container, Content, Footer, FooterTab, Button, Icon, Text, Badge, StyleProvider } from 'native-base';
 
-type Tab = 'home' | 'recent' | 'setting';
+type Tab = 'home' | 'recent' | 'setting' | 'evaluation';
 
 class TabView extends React.Component {
   props: {
@@ -29,16 +30,16 @@ class TabView extends React.Component {
 
   render() {
     return (
-      
+
         <Container>
           {this.renderSelectedTab()}
           <Footer>
             <FooterTab>
               <Button vertical badge={this.props.tasks ? true : false}
-              active={this.props.tab === 'home'} 
+              active={this.props.tab === 'home'}
               onPress={() => this.onTabSelect('home')} >
               {this.props.tasks ? <Badge ><Text>{this.props.tasks}</Text></Badge> : null}
-                <Icon name={this.props.tab === 'home' ? "ios-paper" : "ios-paper-outline"} 
+                <Icon name={this.props.tab === 'home' ? "ios-paper" : "ios-paper-outline"}
                 active={this.props.tab === 'paper'}
                 />
                 <Text>Home</Text>
@@ -46,16 +47,23 @@ class TabView extends React.Component {
 
 
               <Button vertical
-                  active={this.props.tab === 'recent'} 
+                  active={this.props.tab === 'recent'}
                   onPress={() => this.onTabSelect('recent')} >
                 <Icon name={this.props.tab === 'recent' ? 'ios-notifications' : "ios-notifications-outline" }
                 active={this.props.tab === 'home'}/>
                 <Text>Recent</Text>
               </Button>
 
+              <Button vertical
+                  active={this.props.tab === 'evaluation'}
+                  onPress={() => this.onTabSelect('evaluation')} >
+                <Icon name={this.props.tab === 'evaluation' ? 'trophy' : "trophy-outline" }
+                active={this.props.tab === 'home'}/>
+                <Text>Evaluation</Text>
+              </Button>
 
               <Button vertical badge
-                  active={this.props.tab === 'setting'} 
+                  active={this.props.tab === 'setting'}
                   onPress={() => this.onTabSelect('setting')} >
                   <Badge ><Text>4</Text></Badge>
                 <Icon name={this.props.tab === 'setting' ? 'ios-settings' : "ios-settings-outline"}
@@ -76,6 +84,9 @@ class TabView extends React.Component {
 
       case 'recent':
       return <HistoryView navigation={this.props.navigation}/>
+
+      case 'evaluation':
+      return <EvaluationView navigation={this.props.navigation} />
 
       default:
       return <SettingView navigation={this.props.navigation}/>
