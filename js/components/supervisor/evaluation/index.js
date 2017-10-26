@@ -1,7 +1,7 @@
 //@flow
 'use-strict'
 import React, { Component } from 'react';
-import { View, StatusBar , TextInput, ListView, FlatList, Dimensions, PanResponder, Animated } from 'react-native';
+import { View, TextInput, ListView, FlatList, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right } from 'native-base';
 import { alert, Header, Button as Btn, primary, Image} from '../../common'
@@ -10,8 +10,7 @@ import { deleteTask } from '../../../model/query/'
 import { navigate } from '../../../actions'
 import styles from './styles'
 import Modal from 'react-native-modalbox'
-import InfoCard from '../infoCard'
-import StaffCard from './StaffBubble'
+import StaffCard from './StaffCard'
 var _ = require('lodash/core')
 
 type Props = {
@@ -73,7 +72,7 @@ class EvaluationView extends Component {
   staffKeyExtractor = (item, index) => item.id;
 
   renderStaffRow = ({item}) => (
-    <StaffCard name={item.name} onClick={() => this.openStaffInfo(item.id)} />
+    <StaffCard name={item.name} status={item.status} onClick={() => this.openStaffInfo(item.id)} />
   );
 
   render() {
@@ -87,6 +86,12 @@ class EvaluationView extends Component {
             renderItem={this.renderStaffRow.bind(this)}
            />
         </Content>
+        <Modal
+          style={styles.modal}
+          ref={"modal"}
+          swipeToClose={true}>
+            <Text>Display info about what {this.state.selected.name} did!</Text>
+        </Modal>
       </View>
     );
   }
@@ -95,4 +100,4 @@ class EvaluationView extends Component {
 const mapDispatchToProps = (dispatch) => ({
   navigate: (route: string, params: any) => dispatch(navigate(route, params))
 })
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(null, mapDispatchToProps)(EvaluationView);
