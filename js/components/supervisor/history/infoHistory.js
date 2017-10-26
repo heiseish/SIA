@@ -2,7 +2,7 @@
 'use-strict';
 import React, { Component } from 'react';
 import { Dimensions, Platform} from 'react-native';
-import { Image, primary, secondary, Button, alert } from '../common'
+import { Image, primary, secondary, Button, alert } from '../../common'
 import { Text, View, Icon } from 'native-base';
 import { connect } from 'react-redux';
 let ios = Platform.OS === 'ios'
@@ -21,7 +21,7 @@ type  Props = {
   close: () => void
 };
 
-export default class InfoCard extends Component {
+export default class InfoHistory extends Component {
   constructor(props: Props) {
     super(props)
   }
@@ -35,6 +35,8 @@ export default class InfoCard extends Component {
         {this.renderHeader('Personels')}
         {defect.supervisor ? <Text style={styles.subTitle}>     Supervised by 
         <Text>                   {defect.supervisor}</Text></Text> : <View style={{height: 30}}/>}
+        {defect.supervisor ? <Text style={styles.subTitle}>     Technician support 
+        <Text>           {defect.staff}</Text></Text> : <View style={{height: 30}}/>}
         {this.renderFooter()}
       </View>
     )
@@ -73,16 +75,7 @@ export default class InfoCard extends Component {
   )
 
   renderFooter = () => (
-    <View style={styles.row}>
         <Button style={styles.button}
-        icon='paper'
-        onPress={() => this.props.handlePress()} 
-        color='#43893c'
-        textStyle={{fontSize: 25 }}
-        iconStyle={{ fontSize: 25 }}
-        text='Assign'/>
-
-        <Button style={this.props.defect.status === 'ongoing' ? styles.buttonCenter : styles.button}
         icon='close' 
         onPress={() => this.props.close()} 
         textStyle={{
@@ -93,7 +86,6 @@ export default class InfoCard extends Component {
         }}
         color={primary.normal}
         text="Close"/>
-    </View>
   )
 
 }
@@ -103,6 +95,7 @@ export default class InfoCard extends Component {
 
 const styles = {
   container: {
+    height: 550,
     flexDirection: 'column',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -167,12 +160,6 @@ const styles = {
   },
 
   button: {
-    width: 190,
-    height: 50,
-    borderRadius: 30
-  },
-
-  buttonCenter: {
     width: 190,
     height: 50,
     borderRadius: 30,

@@ -8,7 +8,17 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
 export default {
+  minorText: {
+    fontWeight: '400',
+    fontSize: 15,
+    color: 'white'
+  },
+  modal: {
+    width: deviceWidth,
+    height: 550,
+  },
   listItem: {
+    marginLeft: -1,
     height: 100
   },
   listHeader: {
@@ -44,10 +54,6 @@ export default {
   defectName: {
     fontSize: 18,
     fontWeight: '400'
-  },
-  modal: {
-    width: deviceWidth,
-    height: 500,
   },
   info: {
     fontStyle:'italic',

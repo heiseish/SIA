@@ -18,7 +18,8 @@ type  Props = {
     id: string,
     image?: string
   },
-  close: () => void
+  close: () => void,
+  staff: any
 };
 
 export default class InfoCard extends Component {
@@ -38,7 +39,7 @@ export default class InfoCard extends Component {
   }
 
   renderHeader = (item: any) => (
-    <ListItem button style={styles.listItem} onPress={() => this._initiateTask(item)}>
+    <ListItem style={styles.listItem}>
         <Left>
           <Image circle radius={40} source={{uri: 'https://s3.amazonaws.com/FringeBucket/default-user.png'}}
           style={{borderWidth: 1, borderColor: item.status === 'busy' ? 'red' : 'green'}}/>

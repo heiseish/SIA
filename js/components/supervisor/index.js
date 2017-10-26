@@ -13,7 +13,7 @@ import SettingView from './setting';
 import EvaluationView from './evaluation';
 import { Container, Content, Footer, FooterTab, Button, Icon, Text, Badge, StyleProvider } from 'native-base';
 
-type Tab = 'home' | 'recent' | 'setting' | 'evaluation';
+type Tab = 'home' | 'recent' | 'setting';
 
 class TabView extends React.Component {
   props: {
@@ -52,14 +52,6 @@ class TabView extends React.Component {
                 <Icon name={this.props.tab === 'recent' ? 'ios-notifications' : "ios-notifications-outline" }
                 active={this.props.tab === 'home'}/>
                 <Text>Recent</Text>
-              </Button>
-
-              <Button vertical
-                  active={this.props.tab === 'evaluation'}
-                  onPress={() => this.onTabSelect('evaluation')} >
-                <Icon name={this.props.tab === 'evaluation' ? 'trophy' : 'trophy-outline' }
-                active={this.props.tab === 'home'}/>
-                <Text>Evaluate</Text>
               </Button>
 
               <Button vertical badge
