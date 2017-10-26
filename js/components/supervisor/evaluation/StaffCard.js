@@ -3,14 +3,7 @@
 import React, { Component } from 'react';
 import { View, Text, Dimensions, TouchableHighlight } from 'react-native';
 import styles from './styles';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { Image } from '../../common';
-=======
->>>>>>> Add modal box support for staff evaluation page
-=======
-import { Image } from '../../common';
->>>>>>> 17f394db709d0cc2de9fa24a1b39bf113c39eec5
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -24,10 +17,6 @@ export default class StaffCard extends Component {
     const staffName = this.props.name;
     return (
       <TouchableHighlight
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 17f394db709d0cc2de9fa24a1b39bf113c39eec5
       style={{padding:5,height:70,width:deviceWidth}}
       activeOpacity={50}
       underlayColor={'darkgray'}
@@ -45,8 +34,6 @@ export default class StaffCard extends Component {
           <View style={{paddingLeft: 40, paddingBottom: 5, height:20, width:100, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={styles.nameLabel}>{staffName.substr(0, staffName.indexOf(' '))}</Text>
           </View>
-<<<<<<< HEAD
-=======
       style={{padding:5,height:70,width:deviceWidth,justifyContent:'center',alignItems:'flex-start',flexDirection:'row'}}
       onPress={this.props.onClick}
       >
@@ -58,9 +45,7 @@ export default class StaffCard extends Component {
          />
         <View style={{height:20, width:80, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
           <Text style={styles.nameLabel}>{staffName.substr(0, staffName.indexOf(' '))}</Text>
->>>>>>> Add modal box support for staff evaluation page
-=======
->>>>>>> 17f394db709d0cc2de9fa24a1b39bf113c39eec5
+        </View>
         </View>
       </TouchableHighlight>
     );
