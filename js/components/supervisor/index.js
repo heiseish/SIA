@@ -10,7 +10,6 @@ import { primary, secondary, Header } from '../common';
 import HomeView from './home';
 import HistoryView from './history';
 import SettingView from './setting';
-import EvaluationView from './evaluation';
 import { Container, Content, Footer, FooterTab, Button, Icon, Text, Badge, StyleProvider } from 'native-base';
 
 type Tab = 'home' | 'recent' | 'setting';
@@ -76,9 +75,6 @@ class TabView extends React.Component {
 
       case 'recent':
       return <HistoryView navigation={this.props.navigation}/>
-
-      case 'evaluation':
-      return <EvaluationView navigation={this.props.navigation} />
 
       default:
       return <SettingView navigation={this.props.navigation}/>
