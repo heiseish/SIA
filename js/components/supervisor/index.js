@@ -57,9 +57,9 @@ class TabView extends React.Component {
               <Button vertical
                   active={this.props.tab === 'evaluation'}
                   onPress={() => this.onTabSelect('evaluation')} >
-                <Icon name={this.props.tab === 'evaluation' ? 'trophy' : "trophy-outline" }
+                <Icon name={this.props.tab === 'evaluation' ? 'trophy' : 'trophy-outline' }
                 active={this.props.tab === 'home'}/>
-                <Text>Evaluation</Text>
+                <Text>Evaluate</Text>
               </Button>
 
               <Button vertical badge
