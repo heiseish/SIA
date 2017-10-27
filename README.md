@@ -5,6 +5,7 @@
 ## Authors: Team S06P
 - [Dao Truong Giang](https://github.com/heiseish)
 - [Le Minh Phuc](https://github.com/le-minhphuc)
+- [Hoang Thi Hai Yen](https://github.com/heiseish)
 
 ## Installation
 - Install [Expo Client App](https://docs.expo.io/versions/latest/introduction/installation.html) on your mobile phone.
