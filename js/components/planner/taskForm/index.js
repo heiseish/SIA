@@ -9,9 +9,10 @@ import styles from './styles';
 import { Image, alert, Header, secondary} from '../../common/';
 import { createTask, editTask, uploadImage } from '../../../model/query';
 import { back } from '../../../actions';
-import convertToByteArray from '../../../lib/convertToByteArray';
+import { convertToByteArray, interpretTime, getTimeFromUnix } from '../../../lib';
 import { Bar } from 'react-native-progress';
-
+import { isValid } from './util'
+const _ = require('lodash/core')
 let ios = Platform.OS === 'ios'
 
 let ActionSheetConfig = {
@@ -46,6 +47,10 @@ type State = {
   isUploading: boolean,
   progress: number,
   image: string,
+  flightNoArrival: string,
+  flightNoDeparture: string,
+  departure: string,
+  arrival: string
 };
 
 class NewTask extends Component {
@@ -64,7 +69,11 @@ class NewTask extends Component {
       id: 0,
       isUploading: false,
       progress: 0,
-      image: ''
+      image: '',
+      flightNoArrival: '',
+      flightNoDeparture: '',
+      departure: '',
+      arrival: ''
     }
   }
 
@@ -81,7 +90,11 @@ class NewTask extends Component {
         description: defect.description,
         iconName: 'checkmark',
         title: 'Edit a defect',
-        id: defect.id
+        id: defect.id,
+        flightNoArrival: defect.flight.arrivalNo,
+        flightNoDeparture: defect.flight.departureNo,
+        departure: getTimeFromUnix(defect.flight.departure.toString()),
+        arrival: getTimeFromUnix(defect.flight.arrival.toString())
       })
     }
   }
@@ -94,7 +107,9 @@ class NewTask extends Component {
     const { state } = this.props.navigation;
     let intention = state.params.intention;
 
-    switch (intention) {
+
+    if (isValid(this.state.departure, this.state.arrival)) {
+      switch (intention) {
       case 'add':
       if (!this.state.image)
         alert(() => this._createTask(),
@@ -111,24 +126,34 @@ class NewTask extends Component {
 
       default:
 
+      }
     }
+    
   }
 
   _createTask() {
     this.setState({isLoading: true})
-    createTask({
+      createTask({
       name: this.state.name,
       priority: parseInt(this.state.priority, 10),
       description: this.state.description,
-      image: this.state.image
-    }, this.props.creator).then((res) => {
-      this.setState({isLoading: false})
-      alert(this._pop.bind(this), 'Successful!',
-        'The defect has been successfully created!',false);
-    }).catch(err => {
-      this.setState({isLoading: false})
-      alert(undefined, err.message)
-    })
+      image: this.state.image,
+      flight: {
+        departureNo: this.state.flightNoDeparture,
+        arrivalNo: this.state.flightNoArrival,
+        ...interpretTime(this.state.departure, this.state.arrival),
+        departureChanged: false,
+        arrivalChanged: false
+      }
+      }, this.props.creator).then((res) => {
+        this.setState({isLoading: false})
+        alert(this._pop.bind(this), 'Successful!',
+          'The defect has been successfully created!',false);
+      }).catch(err => {
+        this.setState({isLoading: false})
+        alert(undefined, err.message)
+      })
+    
   }
 
   _editTask(defect: any) {
@@ -138,7 +163,14 @@ class NewTask extends Component {
       name: this.state.name,
       priority: parseInt(this.state.priority, 10),
       description: this.state.description,
-      editor: defect.creator === this.props.creator ? null : this.props.creator
+      editor: defect.creator === this.props.creator ? null : this.props.creator,
+      flight: {
+        arrivalNo: this.state.flightNoArrival,
+        departureNo: this.state.flightNoDeparture,
+        ...interpretTime(this.state.departure, this.state.arrival),
+        arrivalChanged: _.isEqual(getTimeFromUnix(defect.flight.arrival),this.state.arrival) ? false : true,
+        departureChanged: _.isEqual(getTimeFromUnix(defect.flight.departure),this.state.departure) ? false : true
+      }
     }).then((res) => {
       this.setState({isLoading: false})
       alert(this._pop.bind(this), 'Successful!',
@@ -148,6 +180,8 @@ class NewTask extends Component {
       alert(undefined, err.message)
     })
   }
+
+ 
 
 
 
@@ -182,6 +216,48 @@ class NewTask extends Component {
               />
               <Icon name="warning"/>
             </Item>
+
+            <Item stackedLabel>
+              <Label>Flight number (Arrival)</Label>
+              <Input 
+              onChangeText={flightNoArrival => this.setState({flightNoArrival})}
+              value={this.state.flightNoArrival}
+              />
+              <Icon name="plane"/>
+            </Item>
+
+
+            <Item stackedLabel>
+              <Label>Arrival  (form HHMM)</Label>
+              <Input
+              keyboardType='numeric'
+              onChangeText={arrival => this.setState({arrival})}
+              value={this.state.arrival}
+              />
+              <Icon name="clock"/>
+            </Item>
+
+            <Item stackedLabel>
+              <Label>Flight number (Departure)</Label>
+              <Input 
+              onChangeText={flightNoDeparture => this.setState({flightNoDeparture})}
+              value={this.state.flightNoDeparture}
+              />
+              <Icon name="plane"/>
+            </Item>
+
+            <Item stackedLabel>
+              <Label>Next Departure (form HHMM)</Label>
+              <Input
+              keyboardType='numeric'
+              onChangeText={departure => this.setState({departure})}
+              value={this.state.departure}
+              />
+              <Icon name="clock"/>
+
+            </Item>
+
+
 
             <Item stackedLabel last style={{height: 300}}>
               <Label style={styles.label}>Description</Label>
