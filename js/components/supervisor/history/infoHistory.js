@@ -32,7 +32,6 @@ export default class InfoHistory extends Component {
       <View style={styles.container}>
         {this.renderHeader(defect.name)}
         {this.renderDetails(defect)}
-        {this.renderHeader('Personels')}
         {defect.supervisor ? <Text style={styles.subTitle}>     Supervised by 
         <Text>                   {defect.supervisor}</Text></Text> : <View style={{height: 30}}/>}
         {defect.staff ? <Text style={styles.subTitle}>     Technician support 
@@ -61,7 +60,7 @@ export default class InfoHistory extends Component {
           <Text style={styles.subTitle}>Description</Text>
           <Text>{defect.description}</Text>
         </View> 
-        {defect.image && <Image style={styles.image} source={{uri: defect.image}}/>}
+        {defect.image !== ''? <Image style={styles.image} source={{uri: defect.image}}/> : null}
       </View>
 
     </View>
@@ -95,7 +94,7 @@ export default class InfoHistory extends Component {
 
 const styles = {
   container: {
-    height: 550,
+    height: height,
     flexDirection: 'column',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -104,6 +103,7 @@ const styles = {
     marginBottom: 5
   },
   header: {
+    marginTop: 20,
     width: width,
     height: 60,
     marginBottom: 0,

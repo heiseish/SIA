@@ -86,7 +86,7 @@ export default {
   },
   modal: {
     width: screenWidth,
-    height: 500,
+    height: screenHeight,
   },
   info: {
     fontStyle:'italic',

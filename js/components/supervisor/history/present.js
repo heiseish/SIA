@@ -101,9 +101,9 @@ export default class Present extends Component {
             <Text note>Status: <Text style={{color: item.status === 'ongoing' ? 'green' : 'red'}}>{item.status}</Text></Text>
           </Body>
         </Left>
-        <Right>
-          {item.image && <Image style={styles.image} source={{uri: item.image}}/> }
-        </Right>
+        {item.image !== '' ?  <Right>
+          <Image style={styles.image} source={{uri: item.image}}/>
+        </Right> : null}
     </ListItem>
   )
 

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, Platform} from 'react-native';
 import { Image, primary, secondary, Button, alert } from '../common'
 import { Text, View, Icon } from 'native-base';
+import { getPresentableDateAndTimeFromUnix } from '../../lib'
 import { connect } from 'react-redux';
 let ios = Platform.OS === 'ios'
 const width = Dimensions.get('window').width
@@ -32,7 +33,8 @@ export default class InfoCard extends Component {
       <View style={styles.container}>
         {this.renderHeader(defect.name)}
         {this.renderDetails(defect)}
-        {this.renderHeader('Personels')}
+        <Text style={styles.subTitle}>     Created by 
+        <Text>                   {defect.creator}</Text></Text>
         {defect.supervisor ? <Text style={styles.subTitle}>     Supervised by 
         <Text>                   {defect.supervisor}</Text></Text> : <View style={{height: 30}}/>}
         {this.renderFooter()}
@@ -51,7 +53,19 @@ export default class InfoCard extends Component {
       <View style={styles.row}>
         {this.renderParticular('Priority',defect.priority)}
         {this.renderParticular('Status', defect.status)}
-        {this.renderParticular('Created by', defect.creator)}
+        <View/>
+      </View>
+
+      <View style={styles.row}>
+        {this.renderParticular('Arrival Flight Number', defect.flight.arrivalNo)}
+        {this.renderParticular('Time', getPresentableDateAndTimeFromUnix(defect.flight.arrival))}
+        <View/>
+      </View>
+
+      <View style={styles.row}>
+        {this.renderParticular('Departure Flight Number', defect.flight.arrivalNo)}
+        {this.renderParticular('Time', getPresentableDateAndTimeFromUnix(defect.flight.departure))}
+        <View/>
       </View>
 
       <View style={styles.row}>
@@ -59,7 +73,8 @@ export default class InfoCard extends Component {
           <Text style={styles.subTitle}>Description</Text>
           <Text>{defect.description}</Text>
         </View> 
-        {defect.image && <Image style={styles.image} source={{uri: defect.image}}/>}
+        {defect.image !== '' ? <Image style={styles.image} source={{uri: defect.image}}/> : null}
+        <View/>
       </View>
 
     </View>
@@ -116,6 +131,7 @@ export default class InfoCard extends Component {
 
 const styles = {
   container: {
+    height: height,
     flexDirection: 'column',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -124,6 +140,7 @@ const styles = {
     marginBottom: 5
   },
   header: {
+    marginTop: 15,
     width: width,
     height: 60,
     marginBottom: 0,
@@ -141,12 +158,12 @@ const styles = {
 
   body: {
     width: width,
-    height: 300,
+    height: 400,
     flexDirection: 'column',
   },
   row: {
     width: width,
-    height: 100,
+    height: 60,
     flexDirection: 'row',
     justifyContent: "space-between",
     marginBottom: 20
@@ -158,14 +175,16 @@ const styles = {
     marginBottom: 10
   },
   image: {
-    width: 200,
-    height: 200,
+    marginTop: 60,
+    marginRight: 30,
+    width: 130,
+    height: 130,
     borderRadius: 10,
     alignSelf: 'center'
   },
   particular: {
     flexDirection: 'column', 
-    width: 130, 
+    width: width/2, 
     height: 70, 
     alignItems: 'center', 
     justifyContent: 'center'

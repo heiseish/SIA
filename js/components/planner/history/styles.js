@@ -47,7 +47,7 @@ export default {
   },
   modal: {
     width: deviceWidth,
-    height: 500,
+    height: deviceHeight,
   },
   info: {
     fontStyle:'italic',

@@ -15,7 +15,7 @@ export default {
   },
   modal: {
     width: deviceWidth,
-    height: 550,
+    height: deviceHeight,
   },
   listItem: {
     marginLeft: -1,

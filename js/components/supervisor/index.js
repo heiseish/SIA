@@ -53,10 +53,9 @@ class TabView extends React.Component {
                 <Text>Recent</Text>
               </Button>
 
-              <Button vertical badge
+              <Button vertical
                   active={this.props.tab === 'setting'}
                   onPress={() => this.onTabSelect('setting')} >
-                  <Badge ><Text>4</Text></Badge>
                 <Icon name={this.props.tab === 'setting' ? 'ios-settings' : "ios-settings-outline"}
                 active={this.props.tab === 'home'}/>
                 <Text>Setting</Text>

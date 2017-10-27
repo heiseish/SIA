@@ -117,7 +117,7 @@ class Tasks extends Component {
                 <Modal
                   style={styles.modal}
                   ref={"modal"}
-                  swipeToClose={true}>
+                  swipeToClose={false}>
                     <InfoCard defect={this.state.selected} 
                     close={() => this.refs.modal.close()}
                     initiateStartOrStop={this._initiateStartOrStop.bind(this)}/>

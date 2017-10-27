@@ -159,9 +159,9 @@ class Home extends Component {
           <Text note>Status: <Text style={{color: 'red'}}>{data.status}</Text></Text>
         </Body>
       </Left>
-      <Right>
-        {data.image && <Image style={styles.image} source={{uri: data.image}}/> }
-      </Right>
+      {data.image !== '' ?  <Right>
+        <Image style={styles.image} source={{uri: data.image}}/>
+      </Right> : null}
     </ListItem>
   )
 

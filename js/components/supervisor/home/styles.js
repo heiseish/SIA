@@ -53,7 +53,11 @@ export default {
   },
   modal: {
     width: deviceWidth,
-    height: 500,
+    height: deviceHeight,
+  },
+  modal2: {
+    width: deviceWidth,
+    height: 480,
   },
   info: {
     fontStyle:'italic',

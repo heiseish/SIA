@@ -32,5 +32,13 @@ export default {
   	height: 150,
   	flexDirection: 'column',
   	justifyContent: 'space-between'
+  },
+  modal: {
+    width: Dimensions.get('window').width,
+    height: 500
+  },
+  resources: {
+    height: 400,
+    width: Dimensions.get('window').width
   }
 };

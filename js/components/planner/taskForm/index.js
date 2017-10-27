@@ -4,13 +4,15 @@ import { ImagePicker } from 'expo';
 import React, { Component } from 'react';
 import { View, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { Container,  Form, Item, Label, CheckBox,Input, Button, Text, Content, Icon, Spinner, ActionSheet  } from 'native-base';
+import { Container,  Form, Item, Label, ListItem, CheckBox,Input, Button, Text, Content, Icon, Spinner, ActionSheet  } from 'native-base';
 import styles from './styles';
-import { Image, alert, Header, secondary} from '../../common/';
+import { Image, alert, Header, secondary, primary} from '../../common/';
 import { createTask, editTask, uploadImage } from '../../../model/query';
 import { back } from '../../../actions';
 import { convertToByteArray, interpretTime, getTimeFromUnix } from '../../../lib';
+import Modal from 'react-native-modalbox'
 import { Bar } from 'react-native-progress';
+import ResourceSelection from './resourceSelection'
 import { isValid } from './util'
 const _ = require('lodash/core')
 let ios = Platform.OS === 'ios'
@@ -50,7 +52,8 @@ type State = {
   flightNoArrival: string,
   flightNoDeparture: string,
   departure: string,
-  arrival: string
+  arrival: string,
+  resources: any
 };
 
 class NewTask extends Component {
@@ -73,7 +76,8 @@ class NewTask extends Component {
       flightNoArrival: '',
       flightNoDeparture: '',
       departure: '',
-      arrival: ''
+      arrival: '',
+      resources: {}
     }
   }
 
@@ -94,7 +98,8 @@ class NewTask extends Component {
         flightNoArrival: defect.flight.arrivalNo,
         flightNoDeparture: defect.flight.departureNo,
         departure: getTimeFromUnix(defect.flight.departure.toString()),
-        arrival: getTimeFromUnix(defect.flight.arrival.toString())
+        arrival: getTimeFromUnix(defect.flight.arrival.toString()),
+        resources: defect.resources
       })
     }
   }
@@ -143,8 +148,9 @@ class NewTask extends Component {
         arrivalNo: this.state.flightNoArrival,
         ...interpretTime(this.state.departure, this.state.arrival),
         departureChanged: false,
-        arrivalChanged: false
-      }
+        arrivalChanged: false,
+      },
+      resources: this.state.resources
       }, this.props.creator).then((res) => {
         this.setState({isLoading: false})
         alert(this._pop.bind(this), 'Successful!',
@@ -170,7 +176,8 @@ class NewTask extends Component {
         ...interpretTime(this.state.departure, this.state.arrival),
         arrivalChanged: _.isEqual(getTimeFromUnix(defect.flight.arrival),this.state.arrival) ? false : true,
         departureChanged: _.isEqual(getTimeFromUnix(defect.flight.departure),this.state.departure) ? false : true
-      }
+      },
+      resources: this.state.resources
     }).then((res) => {
       this.setState({isLoading: false})
       alert(this._pop.bind(this), 'Successful!',
@@ -257,30 +264,73 @@ class NewTask extends Component {
 
             </Item>
 
-
-
-            <Item stackedLabel last style={{height: 300}}>
+            <Item stackedLabel last style={{height: 150}}>
               <Label style={styles.label}>Description</Label>
               <Input 
               // autoFocus={true}
+              returnKeyType='done'
               //somehow this is not working
               multiline = {true}
-              numberOfLines = {10}
+              numberOfLines = {5}
               // style={{borderColor: this.props.color,...styles.textInput}}
               onChangeText={(description) => this.setState({description})}
               value={this.state.description}
             />
             </Item>
-
-            {/* Only show up when the intention is 'add' */}
+             {this.renderResources()}
             {this.state.iconName === 'add' ? this.renderUpload() : null}
 
 
 
           </Form>}
         </Content>
+
+        <Modal
+              style={styles.modal}
+              ref={"modal"}
+              swipeToClose={false}>
+                <ResourceSelection 
+                setResources={(resources) => { 
+                  this.refs.modal.close()
+                  this.setState({resources})
+                }}
+                close={() => this.refs.modal.close()}/>
+            </Modal>
+
       </Container>
     );
+  }
+
+  renderResources() {
+    if (_.isEmpty(this.state.resources)) {
+      return (
+        <Button bordered rounded iconLeft 
+        style={{width: 250, height: 60, alignSelf: 'center', borderColor: secondary.normal, margin: 10}}
+        onPress={() => this.refs.modal.open()}>
+          <Icon name="archive" style={styles.buttonIcon}/>
+          <Text style={{color: secondary.normal}}>Allocate Resources</Text>
+        </Button>
+      )
+    } else {
+      return (
+          <View style={styles.resources}>
+            <Label>Required sources</Label>
+            {Object.values(this.state.resources).map((item, index) => (
+              <ListItem style={{height: 60, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'transparent'}}>
+                <Label>{item.name}</Label>
+                <Text>{item.number}</Text>
+              </ListItem>
+
+            ))}
+            <Button bordered rounded iconLeft 
+            style={{width: 250, height: 60, alignSelf: 'center', borderColor: secondary.normal, margin: 10}}
+            onPress={() => this.refs.modal.open()}>
+              <Icon name="archive" style={styles.buttonIcon}/>
+              <Text style={{color: secondary.normal}}>Re-allocate Resources</Text>
+            </Button>
+          </View>
+      )
+    }
   }
 
   renderUpload = () => (

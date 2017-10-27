@@ -1,6 +1,6 @@
 //@flow
 'use-strict';
-export default (input: string) => {
+export const convertToByteArray =  (input: string) => {
   var binary_string = atob(input);
   var len = binary_string.length;
   var bytes = new Uint8Array(len);

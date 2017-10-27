@@ -6,7 +6,7 @@ export type Defect = {
 	priority: 1 | 2 | 3,
 	createdDate: string,
 	description: string,
-	image?: string,
+	image: string,
 	status: 'unattended' | 'assigned' | 'ongoing' | 'unchecked' | 'completed',
 	creator: string,
 	supervisor?: string,
@@ -15,11 +15,13 @@ export type Defect = {
 	startTime?: string,
 	endTime?: string,
 	flight: Flight,
-	review?: Review
+	review?: Review,
+	resources?: any
 }
 
 type Flight = {
-	 number: string,
+	 departureNo: string,
+	 arrivalNo: string,
 	 departure: string,
 	 arrival: string,
 	 departureChanged: boolean,

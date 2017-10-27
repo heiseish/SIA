@@ -122,7 +122,7 @@ class Home extends Component {
         </Modal>
 
         <Modal
-          style={styles.modal}
+          style={styles.modal2}
           ref={"modal2"}
           swipeToClose={true}>
             <StaffCard staff={this.state.selectedStaff}
@@ -159,9 +159,9 @@ class Home extends Component {
             <Text note>Status: <Text style={{color: 'red'}}>{item.status}</Text></Text>
           </Body>
         </Left>
-        <Right>
-          {item.image && <Image style={styles.image} source={{uri: item.image}}/> }
-        </Right>
+        {item.image !== '' ?  <Right>
+          <Image style={styles.image} source={{uri: item.image}}/>
+        </Right> : null}
       </ListItem>
   )
 
@@ -178,8 +178,6 @@ class Home extends Component {
   renderStaffList = () => (
     <ListItem style={styles.staffList}>
       <FlatList
-        ref={"staffList"}
-        scrollEnabled={!this.state.animating}
         horizontal={true}
         data={this.state.staffData}
         keyExtractor={(item, index) => item.id}

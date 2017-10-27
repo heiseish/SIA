@@ -40,9 +40,10 @@ export default class TaskCard extends Component {
                   <Text note>Status: <Text style={{color: card.status === 'assigned' ? 'red' : 'green'}}>{card.status === 'assigned' ? 'Not started' : card.status}</Text></Text>
                 </Body>
               </Left>
-              <Right>
-                {card.image && <Image style={styles.image} source={{uri: card.image}}/> }
-              </Right>
+
+              {card.image !== '' ? <Right>
+                <Image style={styles.image} source={{uri: card.image}}/> 
+              </Right> : null}
             </ListItem>
         );
     }
