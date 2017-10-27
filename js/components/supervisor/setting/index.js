@@ -17,9 +17,9 @@ type Props = {
 class Setting extends Component {
   props: Props;
   static data = [
-    'View defects by status: Home -> unattended, Recent -> the rest',
-    'Add a new defect with name, priority, description and image',
-    'Edit a defect'
+    'See unattended tasks put up by the planner and assign to technician',
+    'View the status of all tasks and of the technician',
+    'Evaluate the performance of the technician'
   ]
 
   render() {
@@ -53,7 +53,7 @@ class Setting extends Component {
           <Image circle radius={40} source={{uri: 'https://s3.amazonaws.com/FringeBucket/default-user.png'}}/>
           <Body>
             <H3>  {this.props.user.name}</H3>
-            <Text>   Staff</Text>
+            <Text>   Supervisor</Text>
           </Body>
         </Left>
         
@@ -65,7 +65,7 @@ class Setting extends Component {
   renderGuide = () => (
     <Card style={{height: 270}}>
       <CardItem header>
-        <Text>Basic functionalities of a Planner</Text>
+        <Text>Basic functionalities of a Supervisor</Text>
       </CardItem>
       {Setting.data.map(datum => (
         <CardItem>

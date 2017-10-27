@@ -1,13 +1,12 @@
 //@flow
 'use-strict'
 import React, { Component } from 'react';
-import { View, TextInput, ListView, FlatList, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Icon, List, ListItem, Text, Left, Button, Body, Right, Item, Label, Input } from 'native-base';
+import { Container, Spinner, View, Content, Icon, List, ListItem, Text, Left, Button, Body, Right, Item, Label, Input } from 'native-base';
 import StarRating from 'react-native-star-rating';
 import { alert, Header, Button as Btn, primary, Image} from '../../common'
 import firebase from '../../../model'
-import { deleteTask } from '../../../model/query/'
+import { review } from '../../../model/query/'
 import { navigate, back } from '../../../actions'
 import styles from './styles'
 import Modal from 'react-native-modalbox'
@@ -25,9 +24,9 @@ type State = {
   starCount: number,
   staff: any,
   defect: any,
-  review: string
-}
-const deviceWidth = Dimensions.get('window').height;
+  review: string,
+  isLoading: boolean
+};
 
 class EvaluationView extends Component {
   state: State;
@@ -39,7 +38,8 @@ class EvaluationView extends Component {
       starCount: 0,
       staff: {},
       defect: {},
-      review: ''
+      review: '',
+      isLoading: true
     };
   }
 
@@ -50,7 +50,8 @@ class EvaluationView extends Component {
     firebase.database().ref(`staff/${defect.staffId}/`).once("value").then((snap) => {
       this.setState({
         staff: snap.val(),
-        defect
+        defect,
+        isLoading: false
       })
     })
   }
@@ -61,8 +62,15 @@ class EvaluationView extends Component {
     });
   }
 
-  updateRating = (staff: any, defect: any) => {
+  updateRating = () => {
     //update rating to firebase goes here
+    this.setState({isLoading: true})
+    review(this.state.staff, this.state.defect, {
+      comment: this.state.review,
+      grade: this.state.starCount
+    },() => {
+      alert(this._pop.bind(this), 'Successful!', 'The defect and staff has successfully been reviewed!', false)
+    })
   }
 
   _pop = () => {
@@ -81,20 +89,20 @@ class EvaluationView extends Component {
         iconNameLeft="arrow-back"
         handlePressLeft={() => this._pop()}
         />
-        <Content>
+        {this.state.isLoading ? <Spinner color={primary.normal}/> : <Content>
           <DefectSummary defect={defect}/>
           <View style={{height:120, width:null, alignItems: 'center', justifyContent: 'center'}}>
             <StaffCard name={defect.staff} />
           </View>
 
-          <Item stackedLabel style={{height: 300}}>
+          <Item stackedLabel style={{height: 150}}>
               <Label style={styles.label}>Review</Label>
               <Input 
               // autoFocus={true}
               //somehow this is not working
               multiline = {true}
-              numberOfLines = {10}
-              style={{borderColor: primary.normal, borderWidth: 1, width: null}}
+              numberOfLines = {5}
+              style={{borderColor: primary.normal, borderWidth: 1, width: null, borderRadius: 3}}
               onChangeText={(review) => this.setState({review})}
               value={this.state.review}
             />
@@ -104,6 +112,7 @@ class EvaluationView extends Component {
           <View style={{height:70,width:null, alignItems: 'center', justifyContent: 'center'}}>
             <Text style={{fontWeight: '400', padding:5,fontSize:30, color: primary.normal}}>Rate {defect.staff} work!</Text>
           </View>
+          <View style={styles.rating}>
           <StarRating
             starStyle={{color: primary.normal}}
             disabled={false}
@@ -111,9 +120,10 @@ class EvaluationView extends Component {
             rating={this.state.starCount}
             selectedStar={(rating) => this.onStarRatingPress(rating)}
            />
+           </View>
            <Btn style={styles.button}
               icon='send' 
-              onPress={() => this.updateRating(this.state.staff, this.state.defect)} 
+              onPress={() => this.updateRating()} 
               textStyle={{
                 fontSize: 25
               }}
@@ -122,7 +132,7 @@ class EvaluationView extends Component {
               }}
               color={primary.normal}
               text="Close"/>
-        </Content>
+        </Content>}
       </Container>
     );
   }

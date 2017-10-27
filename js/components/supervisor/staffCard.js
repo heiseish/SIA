@@ -45,7 +45,7 @@ export default class InfoCard extends Component {
           style={{borderWidth: 1, borderColor: item.status === 'busy' ? 'red' : 'green'}}/>
           <Body>
             <H3>  {item.name}</H3>
-            <Text>   Staff</Text>
+            <Text>   Technician</Text>
             <Text note>   Status:  <Text style={{color: item.status === 'free' ? 'green' : 'red'}}>{item.status}</Text></Text>
             {item.current ? <Text note>   Curent task:  <Text style={{color: item.status === 'free' ? 'green' : 'red', alignSelf: 'center'}}>
             {Object.keys(item.current).filter(id => item.current[id].status === 'ongoing')[0] ?

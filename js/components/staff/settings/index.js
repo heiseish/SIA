@@ -54,7 +54,7 @@ class Setting extends Component {
           style={{borderWidth: 1, borderColor: this.props.user.status === 'busy' ? 'red' : 'green'}}/>
           <Body>
             <H3>  {this.props.user.name}</H3>
-            <Text>   Staff</Text>
+            <Text>   Technician</Text>
             <Text note>   Status:  <Text style={{color: this.props.user.status === 'free' ? 'green' : 'red'}}>{this.props.user.status}</Text></Text>
           </Body>
         </Left>

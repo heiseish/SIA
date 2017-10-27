@@ -1,8 +1,8 @@
 //@flow
 'use-strict'
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
-
+import { StyleSheet, Dimensions } from 'react-native';
+const width = Dimensions.get('window').width
 export default {
   nameLabel: {
     padding: 4,
@@ -20,4 +20,8 @@ export default {
     alignSelf: 'center',
     marginTop: 10
   },
+  rating: {
+  	width: width - 100,
+  	alignSelf: 'center'
+  }
 };

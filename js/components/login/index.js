@@ -99,7 +99,7 @@ class Login extends Component {
                 onValueChange={(itemValue, itemIndex) => this.setState({type: itemValue})}>
                 <Picker.Item label="Planner" value="planner" />
                 <Picker.Item label="Supervisor" value="supervisor"/>
-                <Picker.Item label="Staff" value="staff"/>
+                <Picker.Item label="Technician" value="staff"/>
              </Picker>
             </View> 
 

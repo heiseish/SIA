@@ -65,9 +65,8 @@ export default class History extends Component {
         <Container>
          <ScrollableTabView 
          style={{marginTop: 20, }}
-        initialPage={1}
         renderTabBar={() => <OverheadTab />}>
-          <Present tabLabel="paper" openModal={(data) => this._openModal(data)}/>
+          <Present tabLabel="paper" openModal={(data) => this._openModal(data)} navigation={this.props.navigation}/>
           <Done tabLabel="done-all" />
         </ScrollableTabView>
 

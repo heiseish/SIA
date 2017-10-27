@@ -14,6 +14,19 @@ export type Defect = {
 	staffId?: string,
 	startTime?: string,
 	endTime?: string,
-	review?: string,
-	grade?: number
+	flight: Flight,
+	review?: Review
+}
+
+type Flight = {
+	 number: string,
+	 departure: string,
+	 arrival: string,
+	 departureChanged: boolean,
+	 arrivalChanged: boolean
+}
+
+type Review = {
+	comment: string,
+	grade: number
 }
