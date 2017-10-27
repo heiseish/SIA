@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "21.0.0"
+    "sdkVersion": "21.0.0",
+    "name": "Orchid",
+    "icon": "./orchid.png",
+    "version": "1.0.0",
+    "slug": "orchid-manage",
+    "ios": {
+      "bundleIdentifier": "exp.host/@leminhphuc/orchid-manage"
+    },
+    "android": {
+      "package": "exp.host/@leminhphuc/orchid-manage"
+    }
   }
 }
